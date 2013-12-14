@@ -38,8 +38,8 @@ class PlayState extends FlxState
 
         b = new Bullet();
         p = new Character(b);
-        b.x = 100;
-        b.y = 100;
+        b.x = 200;
+        b.y = 200;
         add(p);
         add(b);
 	}
