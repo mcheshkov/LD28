@@ -15,6 +15,7 @@ class PlayState extends FlxState
 {
     public var p:Character;
     public var b:Bullet;
+    public var lvl:TiledLevel;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -30,7 +31,8 @@ class PlayState extends FlxState
 		
 		super.create();
 
-        var lvl = new TiledLevel("assets/data/map.tmx");
+        lvl = new TiledLevel("assets/data/map.tmx");
+        add(lvl.backgroundTiles);
         add(lvl.foregroundTiles);
 
 
@@ -38,8 +40,10 @@ class PlayState extends FlxState
 
         b = new Bullet();
         p = new Character(b);
-        b.x = 100;
-        b.y = 100;
+        p.x = 100;
+        p.y = 100;
+        b.x = 300;
+        b.y = 300;
         add(p);
         add(b);
 	}
@@ -60,10 +64,15 @@ class PlayState extends FlxState
 	{
         if (b.state == Pickup){
             FlxG.overlap(p,b,function(p:Character,b:Bullet){
+                FlxG.log.warn("ASDASDASD");
                 b.visible = false;
                 p.pickUpBullet();
             });
         }
+
+        lvl.collideWithLevel(p);
+
+        if(FlxG.keyboard.pressed("R")) FlxG.resetState();
 
 		super.update();
 	}
