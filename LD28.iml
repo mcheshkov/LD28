@@ -15,6 +15,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="flixel-addons 1.0.0" level="application" />
     <orderEntry type="library" name="flixel 3.0.1" level="application" />
+    <orderEntry type="library" name="openfl 1.1.0" level="application" />
   </component>
 </module>
 

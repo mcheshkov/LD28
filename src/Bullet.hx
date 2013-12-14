@@ -78,7 +78,7 @@ class Bullet extends FlxSprite
 
 
 
-       FlxG.log.notice(state);
+        FlxG.log.notice(state);
 
         state = BulletState.Fired;
     }

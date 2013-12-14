@@ -1,5 +1,10 @@
 package;
 
+import flixel.FlxObject;
+import flixel.FlxSprite;
+import flash.display.BitmapData;
+import openfl.Assets;
+import flash.display.Bitmap;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -17,6 +22,9 @@ class Character extends FlxSprite
     public static var CHARGED_COLOR:UInt = 0xff00ffff;
     public static var size:Int = 32;
 
+    public var i1:BitmapData;
+    public var i2:BitmapData;
+
     public var charged:Bool;
 
     public var bullet:Bullet;
@@ -25,7 +33,16 @@ class Character extends FlxSprite
     public function new(bullet:Bullet){
         super();
 
-        makeGraphic(size,size,COLOR);
+        i1 = Assets.getBitmapData("assets/images/character1.png");
+        i2 = Assets.getBitmapData("assets/images/character2.png");
+
+
+        loadGraphic(i2,true,true,32,32);
+        animation.add("down",[0]);
+        animation.add("side",[1]);
+        animation.add("up",[2]);
+        color = COLOR;
+
         charged = false;
 
         this.bullet = bullet;
@@ -35,10 +52,12 @@ class Character extends FlxSprite
         if (FlxG.keyboard.pressed("DOWN")){
             velocity.y = speed;
             lastDirection = Direction.Down;
+            animation.play("down");
         }
         else if (FlxG.keyboard.pressed("UP")){
             velocity.y = -speed;
             lastDirection = Direction.Up;
+            animation.play("up");
         }
         else {
             velocity.y = 0;
@@ -47,10 +66,14 @@ class Character extends FlxSprite
         if (FlxG.keyboard.pressed("LEFT")){
             velocity.x = -speed;
             lastDirection = Direction.Left;
+            animation.play("side");
+            facing = FlxObject.LEFT;
         }
         else if (FlxG.keyboard.pressed("RIGHT")){
             velocity.x = speed;
             lastDirection = Direction.Right;
+            animation.play("side");
+            facing = FlxObject.RIGHT;
         }
         else {
             velocity.x = 0;
@@ -65,7 +88,8 @@ class Character extends FlxSprite
 
     public function pickUpBullet(){
         FlxG.log.warn("pick up");
-        makeGraphic(size,size,CHARGED_COLOR);
+//        makeGraphic(size,size,CHARGED_COLOR);
+        color = CHARGED_COLOR;
         charged = true;
 
         bullet.state = Equip;
@@ -74,10 +98,13 @@ class Character extends FlxSprite
     public function fireBullet(d:Direction){
         if (! charged) return;
 
+        FlxG.camera.shake(0.005,0.1);
+
         bullet.x = x + _halfWidth;
         bullet.y = y + _halfHeight;
 
-        makeGraphic(size,size,COLOR);
+//        makeGraphic(size,size,COLOR);
+        color = COLOR;
         charged = false;
 
         bullet.visible = true;
