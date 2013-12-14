@@ -99,9 +99,9 @@ class Character extends FlxSprite
         if (! charged) return;
 
         FlxG.camera.shake(0.005,0.1);
-
-        bullet.x = x + _halfWidth;
-        bullet.y = y + _halfHeight;
+        
+        bullet.x = x + _halfWidth - bullet.width * .5;
+        bullet.y = y + _halfHeight - bullet.height * .5;
 
 //        makeGraphic(size,size,COLOR);
         color = COLOR;

@@ -42,22 +42,23 @@ class Bullet extends FlxSprite
     }
 
     public function drop(){
+        velocity.x = velocity.y = 0;
         state = BulletState.Pickup;
         var newX:Float = x;
         var newY:Float = y;
 
         switch(lastDirection){
             case Direction.Up:
-                newY += 5;
+                newY += size * 2;
             case Direction.Down:
-                newY -= 5;
+                newY -= size * 2;
             case Direction.Left:
-                newX += 5;
+                newX += size * 2;
             case Direction.Right:
-                newX -= 5;
+                newX -= size * 2;
         }
 
-        FlxTween.linearMotion(this, x, y, newX, newY, .1, true, {ease:FlxEase.bounceIn, type:FlxTween.ONESHOT, complete: function(a:FlxTween){
+        FlxTween.linearMotion(this, x, y, newX, newY, .3, true, {ease:FlxEase.quintOut, type:FlxTween.ONESHOT, complete: function(a:FlxTween){
             immovable = false;
         }});
 
