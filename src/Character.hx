@@ -74,8 +74,8 @@ class Character extends FlxSprite
     public function fireBullet(d:Direction){
         if (! charged) return;
 
-        bullet.x = x + _halfWidth;
-        bullet.y = y + _halfHeight;
+        bullet.x = x + _halfWidth - bullet.width * .5;
+        bullet.y = y + _halfHeight - bullet.height * .5;
 
         makeGraphic(size,size,COLOR);
         charged = false;
