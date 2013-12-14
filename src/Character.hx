@@ -33,31 +33,62 @@ class Character extends FlxSprite
     public function new(bullet:Bullet){
         super();
 
-        i1 = Assets.getBitmapData("assets/images/character1.png");
-        i2 = Assets.getBitmapData("assets/images/character2.png");
+        loadAssets();
 
-
-        loadGraphic(i2,true,true,32,32);
-        animation.add("down",[0]);
-        animation.add("side",[1]);
-        animation.add("up",[2]);
+        loadChar2();
         color = COLOR;
 
+        lastDirection = Right;
         charged = false;
 
         this.bullet = bullet;
     }
 
+    public var assestLoaded:Bool = false;
+
+    public function loadAssets(){
+        if (assestLoaded) return;
+
+        i1 = Assets.getBitmapData("assets/images/character1.png");
+        i2 = Assets.getBitmapData("assets/images/character2.png");
+    }
+
+    public function loadChar1(){
+        loadGraphic(i1,true,true,32,32);
+
+        loadAnimations();
+    }
+
+    public function loadChar2(){
+        loadGraphic(i2,true,true,32,32);
+
+        loadAnimations();
+    }
+
+    public function loadAnimations(){
+        animation.add("down_stand",[0,6],10);
+        animation.add("side_stand",[1,7],10);
+        animation.add("up_stand",[2,8],10);
+
+        animation.add("down_walk",[0,3],10);
+        animation.add("side_walk",[1,4],10);
+        animation.add("up_walk",[2,5],10);
+    }
+
     override public function update():Void {
+        var walking:Bool = false;
+
         if (FlxG.keyboard.pressed("DOWN")){
             velocity.y = speed;
             lastDirection = Direction.Down;
-            animation.play("down");
+            animation.play("down_walk");
+            walking = true;
         }
         else if (FlxG.keyboard.pressed("UP")){
             velocity.y = -speed;
             lastDirection = Direction.Up;
-            animation.play("up");
+            animation.play("up_walk");
+            walking = true;
         }
         else {
             velocity.y = 0;
@@ -66,17 +97,31 @@ class Character extends FlxSprite
         if (FlxG.keyboard.pressed("LEFT")){
             velocity.x = -speed;
             lastDirection = Direction.Left;
-            animation.play("side");
+            animation.play("side_walk");
             facing = FlxObject.LEFT;
+            walking = true;
         }
         else if (FlxG.keyboard.pressed("RIGHT")){
             velocity.x = speed;
             lastDirection = Direction.Right;
-            animation.play("side");
+            animation.play("side_walk");
             facing = FlxObject.RIGHT;
+            walking = true;
         }
         else {
             velocity.x = 0;
+        }
+
+        if (! walking){
+            switch(lastDirection){
+            case Up:
+                animation.play("up_stand");
+            case Down:
+                animation.play("down_stand");
+            case Left:
+            case Right:
+                animation.play("side_stand");
+            }
         }
 
         if(FlxG.keyboard.pressed("SHIFT")){
