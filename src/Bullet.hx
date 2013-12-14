@@ -18,7 +18,7 @@ enum BulletState{
  */
 class Bullet extends FlxSprite
 {
-    public static var SPEED:Int = 100;
+    public static var SPEED:Int = 500;
     public static var COLOR:Int = 0xff407740;
     public static var size:Int = 8;
 

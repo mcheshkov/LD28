@@ -46,6 +46,8 @@ class PlayState extends FlxState
         b.y = 300;
         add(p);
         add(b);
+
+        FlxG.camera.follow(p);
 	}
 	
 	/**
@@ -62,6 +64,8 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+        super.update();
+
         if (b.state == Pickup){
             FlxG.overlap(p,b,function(p:Character,b:Bullet){
                 FlxG.log.warn("ASDASDASD");
@@ -73,7 +77,5 @@ class PlayState extends FlxState
         lvl.collideWithLevel(p);
 
         if(FlxG.keyboard.pressed("R")) FlxG.resetState();
-
-		super.update();
 	}
 }
