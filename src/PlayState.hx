@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.editors.tiled.TiledMap;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -12,6 +13,9 @@ import flixel.util.FlxMath;
  */
 class PlayState extends FlxState
 {
+    public var p:Character;
+    public var b:Bullet;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -25,6 +29,19 @@ class PlayState extends FlxState
 		#end
 		
 		super.create();
+
+        var lvl = new TiledLevel("assets/data/map.tmx");
+        add(lvl.foregroundTiles);
+
+
+
+
+        b = new Bullet();
+        p = new Character(b);
+        b.x = 100;
+        b.y = 100;
+        add(p);
+        add(b);
 	}
 	
 	/**
@@ -41,6 +58,13 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+        if (b.state == Pickup){
+            FlxG.overlap(p,b,function(p:Character,b:Bullet){
+                b.visible = false;
+                p.pickUpBullet();
+            });
+        }
+
 		super.update();
-	}	
+	}
 }

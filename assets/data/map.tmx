@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset.png" tilewidth="32" tileheight="32">
+  <image source="../tiled/tileset.png" width="64" height="32"/>
+ </tileset>
+ <layer name="BG" width="100" height="100">
+  <properties>
+   <property name="nocollide" value="true"/>
+   <property name="tileset" value="tileset.png"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt0cEJAAAIxDBx/6GdwLceJNAJWgUAAAAAGXqJG3784scvXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQLYB56gALw==
+  </data>
+ </layer>
+ <layer name="FG" width="100" height="100">
+  <properties>
+   <property name="tileset" value="tileset.png"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt2TEKhTAQRdHo/hdt8QtF/NE8DUxxDqQxkGIuFpqltbZMWoybNTs9MrPmpkdGj1r0qGVkbuvNSs9lN9qjt3fc1yPzVY/zvh4ZPWrRo5Yve6Tnshud29MmemT0qCXp0fvuSM/l5+3c/jXRI5PO7e4d0SPj/1UtetTSu9N7eud39VyPzKy7Wj0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3tkAMf8Amw==
+  </data>
+ </layer>
+</map>
