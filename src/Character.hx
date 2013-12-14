@@ -56,13 +56,8 @@ class Character extends FlxSprite
             velocity.x = 0;
         }
 
-        if(FlxG.keyboard.pressed("Z")){
+        if(FlxG.keyboard.pressed("SHIFT")){
             fireBullet(lastDirection);
-        }
-
-        if (charged){
-            bullet.x = x + _halfWidth;
-            bullet.y = y + _halfHeight;
         }
 
         super.update();
@@ -78,6 +73,9 @@ class Character extends FlxSprite
 
     public function fireBullet(d:Direction){
         if (! charged) return;
+
+        bullet.x = x + _halfWidth;
+        bullet.y = y + _halfHeight;
 
         makeGraphic(size,size,COLOR);
         charged = false;
