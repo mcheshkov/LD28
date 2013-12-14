@@ -122,7 +122,7 @@ class TiledLevel extends TiledMap {
 //        }
 //    }
 
-    public function collideWithLevel(obj:FlxObject, ?notifyCallback:FlxObject -> FlxObject -> Void, ?processCallback:FlxObject -> FlxObject -> Bool):Bool {
+    public function collideWithLevel(obj:FlxObject, ?notifyCallback:Dynamic -> Dynamic -> Void, ?processCallback:Dynamic -> Dynamic -> Bool):Bool {
         if (collidableTileLayers != null) {
             for (map in collidableTileLayers) {
             // IMPORTANT: Always collide the map with objects, not the other way around.

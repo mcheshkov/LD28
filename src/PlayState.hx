@@ -1,5 +1,7 @@
 package;
 
+import Bullet.BulletState;
+import Bullet.BulletState;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -66,13 +68,18 @@ class PlayState extends FlxState
 	{
         super.update();
 
-        if (b.state == Pickup){
+        if (b.state == BulletState.Pickup){
             FlxG.overlap(p,b,function(p:Character,b:Bullet){
                 FlxG.log.warn("ASDASDASD");
                 b.visible = false;
                 p.pickUpBullet();
             });
         }
+
+
+        lvl.collideWithLevel(b, function(tile, bullet:Bullet){
+            bullet.drop();
+        });
 
         lvl.collideWithLevel(p);
 
