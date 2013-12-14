@@ -1,5 +1,11 @@
 package;
 
+import Bullet.BulletState;
+import Direction;
+import Bullet.BulletState;
+import Direction;
+import Direction;
+import Direction;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BitmapData;
@@ -38,7 +44,7 @@ class Character extends FlxSprite
         loadChar2();
         color = COLOR;
 
-        lastDirection = Right;
+        lastDirection = Direction.Right;
         charged = false;
 
         this.bullet = bullet;
@@ -114,12 +120,13 @@ class Character extends FlxSprite
 
         if (! walking){
             switch(lastDirection){
-            case Up:
+            case Direction.Up:
                 animation.play("up_stand");
-            case Down:
+            case Direction.Down:
                 animation.play("down_stand");
-            case Left:
-            case Right:
+            case Direction.Left:
+                animation.play("side_stand");
+            case Direction.Right:
                 animation.play("side_stand");
             }
         }
@@ -137,7 +144,7 @@ class Character extends FlxSprite
         color = CHARGED_COLOR;
         charged = true;
 
-        bullet.state = Equip;
+        bullet.state = BulletState.Equip;
     }
 
     public function fireBullet(d:Direction){
@@ -149,13 +156,13 @@ class Character extends FlxSprite
         bullet.y = y + _halfHeight - bullet.height * .5;
 
         switch(d){
-        case Up:
+        case Direction.Up:
             bullet.y -= _halfHeight + bullet.height * .5;
-        case Down:
+        case Direction.Down:
             bullet.y += _halfHeight + bullet.height * .5;
-        case Left:
+        case Direction.Left:
             bullet.x -= _halfWidth + bullet.width * .5;
-        case Right:
+        case Direction.Right:
             bullet.x += _halfWidth + bullet.width * .5;
         }
 
@@ -164,7 +171,7 @@ class Character extends FlxSprite
         charged = false;
 
         bullet.visible = true;
-        bullet.state = Fired;
+        bullet.state = BulletState.Fired;
         bullet.firedBy = this;
         bullet.fire(d);
     }
