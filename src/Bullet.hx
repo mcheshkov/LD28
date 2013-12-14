@@ -57,7 +57,9 @@ class Bullet extends FlxSprite
                 newX -= 5;
         }
 
-        FlxTween.linearMotion(this, x, y,newX, newY, .1, true, {ease:FlxEase.bounceIn, type:FlxTween.ONESHOT});
+        FlxTween.linearMotion(this, x, y, newX, newY, .1, true, {ease:FlxEase.bounceIn, type:FlxTween.ONESHOT, complete: function(a:FlxTween){
+            immovable = false;
+        }});
 
     }
 
