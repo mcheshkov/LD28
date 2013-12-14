@@ -20,6 +20,7 @@ class Character extends FlxSprite
     public var charged:Bool;
 
     public var bullet:Bullet;
+    public var lastDirection:Direction;
 
     public function new(bullet:Bullet){
         super();
@@ -33,9 +34,11 @@ class Character extends FlxSprite
     override public function update():Void {
         if (FlxG.keyboard.pressed("DOWN")){
             velocity.y = speed;
+            lastDirection = Direction.Down;
         }
         else if (FlxG.keyboard.pressed("UP")){
             velocity.y = -speed;
+            lastDirection = Direction.Up;
         }
         else {
             velocity.y = 0;
@@ -43,30 +46,23 @@ class Character extends FlxSprite
 
         if (FlxG.keyboard.pressed("LEFT")){
             velocity.x = -speed;
+            lastDirection = Direction.Left;
         }
         else if (FlxG.keyboard.pressed("RIGHT")){
             velocity.x = speed;
+            lastDirection = Direction.Right;
         }
         else {
             velocity.x = 0;
         }
 
-        if (FlxG.keyboard.pressed("S")){
-            fireBullet(Direction.Down);
-        }
-        if (FlxG.keyboard.pressed("W")){
-            fireBullet(Direction.Up);
-        }
-        if (FlxG.keyboard.pressed("A")){
-            fireBullet(Direction.Left);
-        }
-        if (FlxG.keyboard.pressed("D")){
-            fireBullet(Direction.Right);
+        if(FlxG.keyboard.pressed("Z")){
+            fireBullet(lastDirection);
         }
 
         if (charged){
-            bullet.x = x;
-            bullet.y = y;
+            bullet.x = x + _halfWidth;
+            bullet.y = y + _halfHeight;
         }
 
         super.update();
