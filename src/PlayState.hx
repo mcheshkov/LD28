@@ -70,9 +70,17 @@ class PlayState extends FlxState
 
         if (b.state == BulletState.Pickup){
             FlxG.overlap(p,b,function(p:Character,b:Bullet){
-                FlxG.log.warn("ASDASDASD");
                 b.visible = false;
                 p.pickUpBullet();
+            });
+        }
+
+        if (b.state == BulletState.Fired){
+            FlxG.overlap(p,b,function(p:Character,b:Bullet){
+                if (p == b.firedBy) return;
+
+                p.hurt(1);
+                b.drop();
             });
         }
 

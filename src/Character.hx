@@ -103,12 +103,24 @@ class Character extends FlxSprite
         bullet.x = x + _halfWidth - bullet.width * .5;
         bullet.y = y + _halfHeight - bullet.height * .5;
 
+        switch(d){
+        case Up:
+            bullet.y -= _halfHeight + bullet.height * .5;
+        case Down:
+            bullet.y += _halfHeight + bullet.height * .5;
+        case Left:
+            bullet.x -= _halfWidth + bullet.width * .5;
+        case Right:
+            bullet.x += _halfWidth + bullet.width * .5;
+        }
+
 //        makeGraphic(size,size,COLOR);
         color = COLOR;
         charged = false;
 
         bullet.visible = true;
         bullet.state = Fired;
+        bullet.firedBy = this;
         bullet.fire(d);
     }
 }
