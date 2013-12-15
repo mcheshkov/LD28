@@ -25,7 +25,7 @@ class MenuState extends FlxState
 		#if !FLX_NO_MOUSE
 		FlxG.mouse.hide();
 		#end
-
+        FlxG.sound.play("assets/music/LD.mp3", 1, true);
         var a:FlxSprite = new FlxSprite();
         a.loadGraphic(Assets.getBitmapData("assets/images/menu.png"));
         add(a);
