@@ -174,11 +174,6 @@ class Character extends FlxSprite
                 charged ? animation.play("side_stand") : animation.play("side_stand_load");
             }
         }
-
-        if(FlxG.keyboard.pressed("SHIFT")){
-            fireBullet(lastDirection);
-        }
-
     }
 
     public function pickUpBullet(){
