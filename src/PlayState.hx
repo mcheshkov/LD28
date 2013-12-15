@@ -34,7 +34,7 @@ class PlayState extends FlxState
 		#end
 		
 		super.create();
-
+        FlxG.sound.play("assets/music/LD_3.mp3", 1, true);
         lvl = new TiledLevel("assets/data/map.tmx");
         add(lvl.backgroundTiles);
         add(lvl.foregroundTiles);
@@ -89,9 +89,8 @@ class PlayState extends FlxState
         if (b.state == BulletState.Fired){
             FlxG.overlap(chars,b,function(p:Character,b:Bullet){
                 if (p == b.firedBy) return;
-
+               // p.death();
                 p.hurt(1);
-                p.animation.play("death_side");
                 b.drop();
             });
         }
