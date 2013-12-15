@@ -100,6 +100,7 @@ class Character extends FlxSprite {
     public function death(){
            isDead = true;
            animation.play("death_side");
+
     }
 
 
@@ -185,6 +186,9 @@ class Character extends FlxSprite {
             if (FlxG.keyboard.pressed("SHIFT")) {
                 fireBullet(lastDirection);
             }
+        }else{
+            if(animation.finished){hurt(1);}
+
         }
 
     }
