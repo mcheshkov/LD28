@@ -137,9 +137,7 @@ class Character extends FlxSprite
                 animation.play("up_stand");
             case Direction.Down:
                 animation.play("down_stand");
-            case Direction.Left:
-                animation.play("side_stand");
-            case Direction.Right:
+            case Direction.Left | Direction.Right:
                 animation.play("side_stand");
             }
         }
