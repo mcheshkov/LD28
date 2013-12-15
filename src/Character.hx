@@ -24,14 +24,16 @@ import flixel.util.FlxMath;
 class Character extends FlxSprite
 {
     public static var speed:Int = 100;
-    public static var COLOR:UInt = 0xff00ff00;
-    public static var CHARGED_COLOR:UInt = 0xff00ffff;
     public static var size:Int = 32;
 
     public var i1:BitmapData;
     public var i2:BitmapData;
+    public var i3:BitmapData;
+    public var i4:BitmapData;
+    public var i5:BitmapData;
 
     public var charged:Bool;
+    public var walking:Bool = false;
 
     public var bullet:Bullet;
     public var lastDirection:Direction;
@@ -41,7 +43,7 @@ class Character extends FlxSprite
 
         loadAssets();
 
-        loadChar1();
+        loadChar5();
 
         height = 32;
         width = 32;
@@ -60,7 +62,10 @@ class Character extends FlxSprite
         if (assestLoaded) return;
 
         i1 = Assets.getBitmapData("assets/images/trex1.png");
-        i2 = Assets.getBitmapData("assets/images/character2.png");
+        i2 = Assets.getBitmapData("assets/images/trex2.png");
+        i3 = Assets.getBitmapData("assets/images/trex3.png");
+        i4 = Assets.getBitmapData("assets/images/trex4.png");
+        i5 = Assets.getBitmapData("assets/images/trex5.png");
     }
 
     public function loadChar1(){
@@ -70,7 +75,25 @@ class Character extends FlxSprite
     }
 
     public function loadChar2(){
-        loadGraphic(i2,true,true,32,32);
+        loadGraphic(i2,true,true,65,33);
+
+        loadAnimations();
+    }
+
+    public function loadChar3(){
+        loadGraphic(i3,true,true,65,33);
+
+        loadAnimations();
+    }
+
+    public function loadChar4(){
+        loadGraphic(i4,true,true,65,33);
+
+        loadAnimations();
+    }
+
+    public function loadChar5(){
+        loadGraphic(i5,true,true,65,33);
 
         loadAnimations();
     }
@@ -78,11 +101,9 @@ class Character extends FlxSprite
     public function loadAnimations(){
         animation.add("death_side",[0,1,2,3,4,5,6],10);
 
-
         animation.add("down_stand",[27,28],4);
         animation.add("side_stand",[9,10],4);
         animation.add("up_stand",[36, 37],4);
-
 
         animation.add("down_walk",[29, 30],4);
         animation.add("side_walk",[11, 12, 13, 14, 15, 16, 17],10);
@@ -95,12 +116,10 @@ class Character extends FlxSprite
         animation.add("side_walk_load",[20, 21, 22, 23, 24, 25, 26],10);
     }
 
-    public var walking:Bool = false;
-
     public function goLeft(){
         velocity.x = -speed;
         lastDirection = Direction.Left;
-        animation.play("side_walk");
+        charged ? animation.play("side_walk") : animation.play("side_walk_load");
         facing = FlxObject.LEFT;
         walking = true;
     }
@@ -108,7 +127,7 @@ class Character extends FlxSprite
     public function goRight(){
         velocity.x = speed;
         lastDirection = Direction.Right;
-        animation.play("side_walk");
+        charged ? animation.play("side_walk") : animation.play("side_walk_load");
         facing = FlxObject.RIGHT;
         walking = true;
     }
@@ -124,7 +143,7 @@ class Character extends FlxSprite
     public function goDown(){
         velocity.y = speed;
         lastDirection = Direction.Down;
-        animation.play("down_walk");
+        charged ? animation.play("down_walk") : animation.play("down_walk_load");
 //        facing = FlxObject.DOWN;
         walking = true;
     }
@@ -142,53 +161,16 @@ class Character extends FlxSprite
 
         walking = false;
         velocity.set(0,0);
-        if (FlxG.keyboard.pressed("DOWN")){
-            velocity.y = speed;
-            lastDirection = Direction.Down;
-            charged ? animation.play("down_walk") : animation.play("down_walk_load");
-            walking = true;
-        }
-        else if (FlxG.keyboard.pressed("UP")){
-            velocity.y = -speed;
-            lastDirection = Direction.Up;
-            animation.play("up_walk");
-            walking = true;
-        }
-        else {
-            velocity.y = 0;
-        }
 
         control();
-        if (FlxG.keyboard.pressed("LEFT")){
-            velocity.x = -speed;
-            lastDirection = Direction.Left;
-            charged ? animation.play("side_walk") : animation.play("side_walk_load");
-            facing = FlxObject.LEFT;
-            walking = true;
-        }
-        else if (FlxG.keyboard.pressed("RIGHT")){
-            velocity.x = speed;
-            lastDirection = Direction.Right;
-            charged ? animation.play("side_walk") : animation.play("side_walk_load");
-            facing = FlxObject.RIGHT;
-            walking = true;
-        }
-        else {
-            velocity.x = 0;
-        }
 
         if (! walking){
             switch(lastDirection){
             case Direction.Up:
                 animation.play("up_stand");
             case Direction.Down:
-                animation.play("down_stand");
-            case Direction.Left | Direction.Right:
-                animation.play("side_stand");
                 charged ? animation.play("down_stand") : animation.play("down_stand_load");
-            case Direction.Left:
-                charged ? animation.play("side_stand") : animation.play("side_stand_load");
-            case Direction.Right:
+            case Direction.Left | Direction.Right:
                 charged ? animation.play("side_stand") : animation.play("side_stand_load");
             }
         }
@@ -197,7 +179,6 @@ class Character extends FlxSprite
             fireBullet(lastDirection);
         }
 
-        super.update();
     }
 
     public function pickUpBullet(){
@@ -226,8 +207,6 @@ class Character extends FlxSprite
             bullet.x += _halfWidth + bullet.width * .5;
         }
 
-//        makeGraphic(size,size,COLOR);
-        color = COLOR;
         charged = false;
 
         bullet.visible = true;

@@ -91,6 +91,7 @@ class PlayState extends FlxState
                 if (p == b.firedBy) return;
 
                 p.hurt(1);
+                p.animation.play("death_side");
                 b.drop();
             });
         }
