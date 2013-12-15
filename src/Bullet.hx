@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxRandom;
 import flixel.system.debug.FlxDebugger;
 import Direction;
 import flixel.tweens.FlxTween;
@@ -48,15 +49,17 @@ class Bullet extends FlxSprite
         var newX:Float = x;
         var newY:Float = y;
 
+        var dropBy:Int = FlxRandom.intRanged(size,size*3);
+
         switch(lastDirection){
             case Direction.Up:
-                newY += size * 2;
+                newY += dropBy;
             case Direction.Down:
-                newY -= size * 2;
+                newY -= dropBy;
             case Direction.Left:
-                newX += size * 2;
+                newX += dropBy;
             case Direction.Right:
-                newX -= size * 2;
+                newX -= dropBy;
         }
 
         FlxTween.linearMotion(this, x, y, newX, newY, .3, true, {ease:FlxEase.quintOut, type:FlxTween.ONESHOT, complete: function(a:FlxTween){

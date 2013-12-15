@@ -23,7 +23,7 @@ import flixel.util.FlxMath;
  */
 class Character extends FlxSprite
 {
-    public static var speed:Int = 100;
+    public static var SPEED:Int = 300;
     public static var COLOR:UInt = 0xff00ff00;
     public static var CHARGED_COLOR:UInt = 0xff00ffff;
     public static var size:Int = 32;
@@ -84,7 +84,7 @@ class Character extends FlxSprite
     public var walking:Bool = false;
 
     public function goLeft(){
-        velocity.x = -speed;
+        velocity.x = -SPEED;
         lastDirection = Direction.Left;
         animation.play("side_walk");
         facing = FlxObject.LEFT;
@@ -92,7 +92,7 @@ class Character extends FlxSprite
     }
 
     public function goRight(){
-        velocity.x = speed;
+        velocity.x = SPEED;
         lastDirection = Direction.Right;
         animation.play("side_walk");
         facing = FlxObject.RIGHT;
@@ -100,7 +100,7 @@ class Character extends FlxSprite
     }
 
     public function goUp(){
-        velocity.y = -speed;
+        velocity.y = -SPEED;
         lastDirection = Direction.Up;
         animation.play("up_walk");
 //        facing = FlxObject.LEFT;
@@ -108,7 +108,7 @@ class Character extends FlxSprite
     }
 
     public function goDown(){
-        velocity.y = speed;
+        velocity.y = SPEED;
         lastDirection = Direction.Down;
         animation.play("down_walk");
 //        facing = FlxObject.DOWN;

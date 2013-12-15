@@ -47,14 +47,14 @@ class PlayState extends FlxState
         p.x = 100;
         p.y = 100;
 
-        var p2 = new Character(b);
+        var p2 = new AICharacter(b,lvl);
         p2.x = 100;
         p2.y = 300;
         chars = new FlxGroup();
         chars.add(p);
         chars.add(p2);
 
-        b.x = 300;
+        b.x = 500;
         b.y = 300;
         add(chars);
         add(b);
