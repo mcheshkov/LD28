@@ -59,6 +59,7 @@ class PlayState extends FlxState
         add(chars);
         add(b);
 
+        FlxG.worldBounds.set(-100, -100, 150000, 150000);
         FlxG.camera.follow(p);
 	}
 	
@@ -90,6 +91,7 @@ class PlayState extends FlxState
                 if (p == b.firedBy) return;
 
                 p.hurt(1);
+                p.animation.play("death_side");
                 b.drop();
             });
         }

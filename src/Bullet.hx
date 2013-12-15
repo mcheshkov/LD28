@@ -9,12 +9,14 @@ import flixel.tweens.FlxTween;
 import Bullet.BulletState;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flash.display.BitmapData;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import openfl.Assets;
 
-enum BulletState{
+enum BulletState {
     Pickup;
     Equip;
     Fired;
@@ -23,29 +25,47 @@ enum BulletState{
 /**
  * A FlxState which can be used for the actual gameplay.
  */
-class Bullet extends FlxSprite
-{
+class Bullet extends FlxSprite {
     public static var SPEED:Int = 500;
-    public static var COLOR:Int = 0xff407740;
-    public static var size:Int = 16;
-
+    public static var size:Int = 8;
     public var state:BulletState;
     public var firedBy:Character;
     public var lastDirection:Direction;
-    public function new(){
+    public var i1:BitmapData;
+    public var assestLoaded:Bool = false;
+
+    public function new() {
         super();
 
-        makeGraphic(size,size,COLOR);
+        loadAssets();
+        loadGraphic(i1, true, true, 15, 8);
+
+        loadAnimations();
+
+        animation.play("floor");
         state = BulletState.Pickup;
     }
 
-    override public function update():Void {
+
+    public function loadAssets() {
+        if (assestLoaded) return;
+
+        i1 = Assets.getBitmapData("assets/images/fish.png");
+    }
+
+    public function loadAnimations(){
+        animation.add("fire",[1], 1, false);
+        animation.add("floor",[0,1,2,1],6);
+    }
+
+        override public function update():Void {
         super.update();
     }
 
-    public function drop(){
+    public function drop() {
         velocity.x = velocity.y = 0;
         state = BulletState.Pickup;
+        animation.play("floor");
         var newX:Float = x;
         var newY:Float = y;
 
@@ -62,28 +82,26 @@ class Bullet extends FlxSprite
                 newX -= dropBy;
         }
 
-        FlxTween.linearMotion(this, x, y, newX, newY, .3, true, {ease:FlxEase.quintOut, type:FlxTween.ONESHOT, complete: function(a:FlxTween){
+        FlxTween.linearMotion(this, x, y, newX, newY, .3, true, {ease:FlxEase.quintOut, type:FlxTween.ONESHOT, complete: function(a:FlxTween) {
             immovable = false;
         }});
 
     }
 
-    public function fire(d:Direction){
+    public function fire(d:Direction) {
+        animation.play("fire");
         lastDirection = d;
         switch(d){
-        case Direction.Up:
-            velocity.y = -SPEED;
-        case Direction.Down:
-            velocity.y = SPEED;
-        case Direction.Left:
-            velocity.x = -SPEED;
-        case Direction.Right:
-            velocity.x = SPEED;
+            case Direction.Up:
+                velocity.y = -SPEED;
+            case Direction.Down:
+                velocity.y = SPEED;
+            case Direction.Left:
+                velocity.x = -SPEED;
+            case Direction.Right:
+                velocity.x = SPEED;
         }
 
-
-
-        FlxG.log.notice(state);
 
         state = BulletState.Fired;
     }
