@@ -35,8 +35,8 @@ class AICharacter extends Character
     public static var PI_7_8:Float;
     public static var PI_init:Bool = false;
 
-    public function new(b:Bullet,lvl:TiledLevel){
-        super(b);
+    public function new(skin:Int,b:Bullet,lvl:TiledLevel){
+        super(skin,b);
         lastBulletState = BulletState.Fired;
         this.lvl = lvl;
         lastPoss = [];
@@ -227,6 +227,7 @@ class AICharacter extends Character
             while(cTarget == null || cTarget == this){
                 var i = FlxRandom.intRanged(0,chars.length-1);
                 cTarget = chars[i];
+                if (cTarget.isDead) cTarget = this;
             }
 
             if (! folowing || path == null){
@@ -241,12 +242,12 @@ class AICharacter extends Character
         }
 
         if (cTarget != null){
-            if (cTarget.y == y){
+            if (Math.abs(cTarget.y - y) < Character.size){
                 if (cTarget.x < x) goLeft();
                 else if (cTarget.x > x) goRight();
                 fire();
             }
-            else if (cTarget.x == x){
+            else if (Math.abs(cTarget.x - x)  < Character.size){
                 if (cTarget.y < y) goUp();
                 else if (cTarget.y > y) goDown();
                 fire();

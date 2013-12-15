@@ -40,22 +40,41 @@ class PlayState extends FlxState {
 
 
         b = new Bullet();
-        p = new KeyboardCharacter(b);
-        p.x = 100;
-        p.y = 100;
+        b.x = 100;
+        b.y = 100;
 
-        var p2 = new AICharacter(b,lvl);
-        p2.x = 100;
-        p2.y = 300;
+        p = new KeyboardCharacter(1,b);
+        p.x = 500;
+        p.y = 500;
+
+        var p2 = new AICharacter(2,b,lvl);
+        p2.x = 300;
+        p2.y = 800;
+
+        var p3 = new AICharacter(3,b,lvl);
+        p3.x = 2000;
+        p3.y = 1000;
+
+        var p4 = new AICharacter(4,b,lvl);
+        p4.x = 1000;
+        p4.y = 200;
+
+        var p5 = new AICharacter(5,b,lvl);
+        p5.x = 1500;
+        p5.y = 1500;
 
         chars = new FlxGroup();
         chars.add(p);
         chars.add(p2);
+        chars.add(p3);
+        chars.add(p4);
+        chars.add(p5);
 
         p2.setChars(chars);
+        p3.setChars(chars);
+        p4.setChars(chars);
+        p5.setChars(chars);
 
-        b.x = 500;
-        b.y = 300;
         add(chars);
         add(b);
 

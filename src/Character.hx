@@ -38,12 +38,26 @@ class Character extends FlxSprite
     public var bullet:Bullet;
     public var lastDirection:Direction;
 
-    public function new(bullet:Bullet) {
+    public function new(skin:Int,bullet:Bullet) {
         super();
 
         loadAssets();
 
-        loadChar5();
+        switch(skin){
+            case 1:
+                loadChar1();
+            case 2:
+                loadChar2();
+            case 3:
+                loadChar3();
+            case 4:
+                loadChar4();
+            case 5:
+                loadChar5();
+            default:
+                loadChar1();
+        }
+
 
         height = 32;
         width = 32;
