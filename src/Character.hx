@@ -99,7 +99,7 @@ class Character extends FlxSprite
     }
 
     public function loadAnimations(){
-        animation.add("death_side",[0,1,2,3,4,5,6],10);
+        animation.add("death_side",[0,1,2,3,4,5,6],10, false);
 
         animation.add("down_stand",[27,28],4);
         animation.add("side_stand",[9,10],4);
