@@ -52,7 +52,7 @@ class PlayState extends FlxState {
         p2.y = 800;
 
         var p3 = new AICharacter(3,b,lvl);
-        p3.x = 2000;
+        p3.x = 400;
         p3.y = 1000;
 
         var p4 = new AICharacter(4,b,lvl);
@@ -60,8 +60,8 @@ class PlayState extends FlxState {
         p4.y = 200;
 
         var p5 = new AICharacter(5,b,lvl);
-        p5.x = 1500;
-        p5.y = 1500;
+        p5.x = 500;
+        p5.y = 1200;
 
         chars = new FlxGroup();
         chars.add(p);
@@ -122,6 +122,6 @@ class PlayState extends FlxState {
 
         lvl.collideWithLevel(chars);
 
-        if (FlxG.keyboard.pressed("R")) FlxG.resetState();
+        if (FlxG.keyboard.pressed("R")) FlxG.switchState(new MenuState());
     }
 }

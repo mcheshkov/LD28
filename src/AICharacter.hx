@@ -88,6 +88,7 @@ class AICharacter extends Character
 //            FlxG.log.notice("DIST",FlxMath.getDistance(myp,p));
         if (pathIdx >= path.length){
             path = null;
+            pathIdx = 0;
             return;
         }
         if (FlxMath.getDistance(myp,p) < 2){
