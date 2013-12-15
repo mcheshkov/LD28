@@ -29,6 +29,7 @@ class Bullet extends FlxSprite {
     public static var SPEED:Int = 500;
     public static var size:Int = 8;
     public var state:BulletState;
+    public var ownedBy:Character;
     public var firedBy:Character;
     public var lastDirection:Direction;
     public var i1:BitmapData;

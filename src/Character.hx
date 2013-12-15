@@ -181,6 +181,7 @@ class Character extends FlxSprite
         charged = true;
 
         bullet.state = BulletState.Equip;
+        bullet.ownedBy = this;
     }
 
     public function fireBullet(d:Direction){

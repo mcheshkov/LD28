@@ -1,5 +1,6 @@
 package;
 
+import flixel.group.FlxGroup;
 import flixel.util.FlxAngle;
 import flixel.util.FlxPath;
 import flixel.effects.particles.FlxParticle;
@@ -26,6 +27,7 @@ import flixel.util.FlxMath;
 class AICharacter extends Character
 {
     public var lvl:TiledLevel;
+    public var chars:Array<Character>;
 
     public static var PI_1_8:Float;
     public static var PI_3_8:Float;
@@ -37,7 +39,7 @@ class AICharacter extends Character
         super(b);
         lastBulletState = BulletState.Fired;
         this.lvl = lvl;
-        lastPos = new FlxPoint();
+        lastPoss = [];
 
         if (! PI_init){
             PI_init = true;
@@ -45,6 +47,14 @@ class AICharacter extends Character
             PI_3_8 = 3./8.*Math.PI;
             PI_5_8 = 5./8.*Math.PI;
             PI_7_8 = 7./8.*Math.PI;
+        }
+    }
+
+    public function setChars(chars:FlxGroup){
+        this.chars = [];
+
+        for (c in chars.members){
+            this.chars.push(cast(c,Character));
         }
     }
 
@@ -63,7 +73,7 @@ class AICharacter extends Character
     public var pathIdx:Int = 0;
 
     var consecPos:Int = 0;
-    var lastPos:FlxPoint;
+    var lastPoss:Array<FlxPoint>;
 
     public function setPath(p:Array<FlxPoint>){
         path = p;
@@ -103,15 +113,30 @@ class AICharacter extends Character
         return new FlxPoint(this.x + this.origin.x,this.y + this.origin.y);
     }
 
+    public var folowing:Bool = false;
+
     override public function control():Void {
-        if (this.x == lastPos.x && this.y == lastPos.y) consecPos++;
-        else {
-            FlxG.log.notice("REFRESH CONSEC", consecPos, lastPos);
-            lastPos.set(this.x,this.y);
+        var found:Bool = false;
+        for (p in lastPoss){
+            if (p.x == x && p.y == y){
+                consecPos++;
+                found = true;
+                break;
+            }
+        }
+        if (! found){
             consecPos = 0;
+//            FlxG.log.notice("NOT FOUND");
+            var pp = new FlxPoint();
+            pp.x = x;
+            pp.y = y;
+            lastPoss.push(pp);
+            if (lastPoss.length > 2) {
+                lastPoss.shift();
+            }
         }
 
-        if (consecPos == 100 || Math.random() < 0.001){
+        if (consecPos == 30 || Math.random() < 0.001){
             FlxG.log.notice("RANDOM", consecPos);
 
             var ppp:FlxPoint = new FlxPoint();
@@ -122,6 +147,8 @@ class AICharacter extends Character
         }
 
         if(bullet.state == BulletState.Pickup){
+            folowing = false;
+
             if (lastBulletState != bullet.state || path == null){
                 FlxG.log.notice("SEARCHING");
                 var pb: FlxPoint = new FlxPoint(bullet.x + bullet.origin.x, bullet.y + bullet.origin.y);
@@ -141,12 +168,14 @@ class AICharacter extends Character
 //                FlxG.log.notice("bullet",pb);
 
                 setPath(cast(lvl.foregroundTiles.members[0],FlxTilemap).findPath(myp,target));
-                for (i in path){
+                if (path != null) for (i in path){
                     FlxG.log.notice("path",i);
                 }
             }
         }
         else if (bullet.state == BulletState.Fired){
+            folowing = false;
+
             FlxG.log.notice("EVADING");
             var ppp:FlxPoint = new FlxPoint();
             ppp.x = myp.x;
@@ -194,6 +223,35 @@ class AICharacter extends Character
                     }
             }
         }
+        else if (bullet.state == BulletState.Equip && bullet.ownedBy == this){
+            while(cTarget == null || cTarget == this){
+                var i = FlxRandom.intRanged(0,chars.length-1);
+                cTarget = chars[i];
+            }
+
+            if (! folowing || path == null){
+                FlxG.log.notice("FOLLOWING");
+                folowing = true;
+                var p:FlxPoint = new FlxPoint();
+                p.x = cTarget.x;
+                p.y = cTarget.y;
+
+                setPath(cast(lvl.foregroundTiles.members[0],FlxTilemap).findPath(myp,p));
+            }
+        }
+
+        if (cTarget != null){
+            if (cTarget.y == y){
+                if (cTarget.x < x) goLeft();
+                else if (cTarget.x > x) goRight();
+                fire();
+            }
+            else if (cTarget.x == x){
+                if (cTarget.y < y) goUp();
+                else if (cTarget.y > y) goDown();
+                fire();
+            }
+        }
 
         if (path != null){
             followPath();
@@ -205,4 +263,6 @@ class AICharacter extends Character
 //            FlxG.log.notice("COLLIDEDEDE");
 //        });
     }
+
+    public var cTarget:Character = null;
 }
