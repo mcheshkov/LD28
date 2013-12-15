@@ -5,6 +5,8 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+
+import openfl.Assets;
 import flixel.util.FlxMath;
 
 /**
@@ -21,9 +23,13 @@ class MenuState extends FlxState
 		FlxG.cameras.bgColor = 0xff131c1b;
 		// Show the mouse (in case it hasn't been disabled)
 		#if !FLX_NO_MOUSE
-		FlxG.mouse.show();
+		FlxG.mouse.hide();
 		#end
-		
+
+        var a:FlxSprite = new FlxSprite();
+        a.loadGraphic(Assets.getBitmapData("assets/images/menu.png"));
+        add(a);
+
 		super.create();
 	}
 	
@@ -42,5 +48,9 @@ class MenuState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+
+        if(FlxG.keyboard.pressed("SHIFT")){
+            FlxG.switchState(new PlayState());
+        }
 	}	
 }
