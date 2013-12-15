@@ -75,42 +75,55 @@ class Character extends FlxSprite
         animation.add("up_walk",[2,5],10);
     }
 
+    public var walking:Bool = false;
+
+    public function goLeft(){
+        velocity.x = -speed;
+        lastDirection = Direction.Left;
+        animation.play("side_walk");
+        facing = FlxObject.LEFT;
+        walking = true;
+    }
+
+    public function goRight(){
+        velocity.x = speed;
+        lastDirection = Direction.Right;
+        animation.play("side_walk");
+        facing = FlxObject.RIGHT;
+        walking = true;
+    }
+
+    public function goUp(){
+        velocity.y = -speed;
+        lastDirection = Direction.Up;
+        animation.play("up_walk");
+//        facing = FlxObject.LEFT;
+        walking = true;
+    }
+
+    public function goDown(){
+        velocity.y = speed;
+        lastDirection = Direction.Down;
+        animation.play("down_walk");
+//        facing = FlxObject.DOWN;
+        walking = true;
+    }
+
+    public function fire(){
+        fireBullet(lastDirection);
+    }
+
+    public function control():Void{
+
+    }
+
     override public function update():Void {
-        var walking:Bool = false;
+        super.update();
 
-        if (FlxG.keyboard.pressed("DOWN")){
-            velocity.y = speed;
-            lastDirection = Direction.Down;
-            animation.play("down_walk");
-            walking = true;
-        }
-        else if (FlxG.keyboard.pressed("UP")){
-            velocity.y = -speed;
-            lastDirection = Direction.Up;
-            animation.play("up_walk");
-            walking = true;
-        }
-        else {
-            velocity.y = 0;
-        }
+        walking = false;
+        velocity.set(0,0);
 
-        if (FlxG.keyboard.pressed("LEFT")){
-            velocity.x = -speed;
-            lastDirection = Direction.Left;
-            animation.play("side_walk");
-            facing = FlxObject.LEFT;
-            walking = true;
-        }
-        else if (FlxG.keyboard.pressed("RIGHT")){
-            velocity.x = speed;
-            lastDirection = Direction.Right;
-            animation.play("side_walk");
-            facing = FlxObject.RIGHT;
-            walking = true;
-        }
-        else {
-            velocity.x = 0;
-        }
+        control();
 
         if (! walking){
             switch(lastDirection){
@@ -123,12 +136,6 @@ class Character extends FlxSprite
                 animation.play("side_stand");
             }
         }
-
-        if(FlxG.keyboard.pressed("SHIFT")){
-            fireBullet(lastDirection);
-        }
-
-        super.update();
     }
 
     public function pickUpBullet(){

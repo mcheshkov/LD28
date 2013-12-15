@@ -1,5 +1,6 @@
 package;
 
+import flixel.group.FlxGroup;
 import Bullet.BulletState;
 import Bullet.BulletState;
 import flixel.addons.editors.tiled.TiledMap;
@@ -15,6 +16,7 @@ import flixel.util.FlxMath;
  */
 class PlayState extends FlxState
 {
+    public var chars:FlxGroup;
     public var p:Character;
     public var b:Bullet;
     public var lvl:TiledLevel;
@@ -41,12 +43,20 @@ class PlayState extends FlxState
 
 
         b = new Bullet();
-        p = new Character(b);
+        p = new KeyboardCharacter(b);
         p.x = 100;
         p.y = 100;
+
+        var p2 = new Character(b);
+        p2.x = 100;
+        p2.y = 300;
+        chars = new FlxGroup();
+        chars.add(p);
+        chars.add(p2);
+
         b.x = 300;
         b.y = 300;
-        add(p);
+        add(chars);
         add(b);
 
         FlxG.camera.follow(p);
@@ -69,14 +79,14 @@ class PlayState extends FlxState
         super.update();
 
         if (b.state == BulletState.Pickup){
-            FlxG.overlap(p,b,function(p:Character,b:Bullet){
+            FlxG.overlap(chars,b,function(p:Character,b:Bullet){
                 b.visible = false;
                 p.pickUpBullet();
             });
         }
 
         if (b.state == BulletState.Fired){
-            FlxG.overlap(p,b,function(p:Character,b:Bullet){
+            FlxG.overlap(chars,b,function(p:Character,b:Bullet){
                 if (p == b.firedBy) return;
 
                 p.hurt(1);
@@ -89,7 +99,7 @@ class PlayState extends FlxState
             bullet.drop();
         });
 
-        lvl.collideWithLevel(p);
+        lvl.collideWithLevel(chars);
 
         if(FlxG.keyboard.pressed("R")) FlxG.resetState();
 	}

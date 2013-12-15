@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxBasic;
 import openfl.Assets;
 import haxe.io.Path;
 import haxe.xml.Parser;
@@ -122,7 +123,7 @@ class TiledLevel extends TiledMap {
 //        }
 //    }
 
-    public function collideWithLevel(obj:FlxObject, ?notifyCallback:Dynamic -> Dynamic -> Void, ?processCallback:Dynamic -> Dynamic -> Bool):Bool {
+    public function collideWithLevel(obj:FlxBasic, ?notifyCallback:Dynamic -> Dynamic -> Void, ?processCallback:Dynamic -> Dynamic -> Bool):Bool {
         if (collidableTileLayers != null) {
             for (map in collidableTileLayers) {
             // IMPORTANT: Always collide the map with objects, not the other way around.
