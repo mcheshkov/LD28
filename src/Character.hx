@@ -42,13 +42,15 @@ class Character extends FlxSprite {
 
     public var headSpr:FlxSprite;
 
+    public var isDeadListen:Bool = false;
+
     public function new(skin:Int, bullet:Bullet) {
         super();
 
         loadAssets();
 
         headSpr = new FlxSprite();
-        headSpr.scrollFactor = new FlxPoint(0,0);
+        headSpr.scrollFactor = new FlxPoint(0, 0);
 
         switch(skin){
             case 1:
@@ -122,6 +124,7 @@ class Character extends FlxSprite {
     public function death() {
         isDead = true;
         animation.play("death_side");
+        isDeadListen = true;
         FlxG.sound.play("assets/sounds/scream_long.mp3", 1);
     }
 
@@ -205,12 +208,18 @@ class Character extends FlxSprite {
                 }
             }
         } else {
-            if (animation.finished) {hurt(1);}
-
+            if (animation.finished) {
+                if (isDeadListen) {
+                    deadListenHandler();
+                }
+            }
         }
-
     }
 
+    public function deadListenHandler(){
+        isDeadListen = false;
+        hurt(1);
+    }
 
     public function pickUpBullet() {
         FlxG.log.warn("pick up");
