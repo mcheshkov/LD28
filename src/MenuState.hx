@@ -26,19 +26,23 @@ class MenuState extends FlxState
     }
 
     public function _mixDR(i:Int,j:Int):Float{
-        return Math.max(i,j)/31;
+        return Math.pow((Math.pow(i/31,4)+Math.pow(j/31,4)),1/4);
+//        return Math.max(i,j)/31;
     }
 
     public function _mixDL(i:Int,j:Int):Float{
-        return Math.max((31-i),j)/31;
+        return Math.pow((Math.pow((31-i)/31,4)+Math.pow(j/31,4)),1/4);
+//        return Math.max((31-i),j)/31;
     }
 
     public function _mixUR(i:Int,j:Int):Float{
-        return Math.max(i,(31-j))/31;
+        return Math.pow((Math.pow(i/31,4)+Math.pow((31-j)/31,4)),1/4);
+//        return Math.max(i,(31-j))/31;
     }
 
     public function _mixUL(i:Int,j:Int):Float{
-        return Math.max((31-i),(31-j))/31;
+        return Math.pow((Math.pow((31-i)/31,4)+Math.pow((31-j)/31,4)),1/4);
+//        return Math.max((31-i),(31-j))/31;
     }
 
     public function mix(bd1:BitmapData,bd2:BitmapData,mf:Int->Int->Float):BitmapData{
@@ -156,8 +160,20 @@ class MenuState extends FlxState
         var ss:FlxSprite = new FlxSprite();
         ss.loadGraphic(bdres);
         ss.x = 10;
-        ss.y = -800;
+        ss.y = -110;
         add(ss);
+
+        var ss2:FlxSprite = new FlxSprite();
+        ss2.loadGraphic(bdres);
+        ss2.x = 200;
+        ss2.y = -450;
+        add(ss2);
+
+        var ss3:FlxSprite = new FlxSprite();
+        ss3.loadGraphic(bdres);
+        ss3.x = 400;
+        ss3.y = -800;
+        add(ss3);
     }
 
 	/**
