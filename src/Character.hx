@@ -26,6 +26,8 @@ class Character extends FlxSprite {
     public static var SPEED:Int = 300;
     public static var size:Int = 32;
 
+    public var id:Int = 0;
+
     public var i1:BitmapData;
     public var i2:BitmapData;
     public var i3:BitmapData;

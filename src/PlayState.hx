@@ -49,22 +49,27 @@ class PlayState extends FlxState {
         p = new KeyboardCharacter(1, b);
         p.x = 500;
         p.y = 500;
+        p.id = 1;
 
         var p2 = new AICharacter(2, b, lvl);
         p2.x = 300;
         p2.y = 800;
+        p2.id = 2;
 
         var p3 = new AICharacter(3, b, lvl);
         p3.x = 400;
         p3.y = 1000;
+        p3.id = 3;
 
         var p4 = new AICharacter(4, b, lvl);
         p4.x = 1000;
         p4.y = 200;
+        p4.id = 4;
 
         var p5 = new AICharacter(5, b, lvl);
         p5.x = 500;
-        p5.y = 1200;
+        p5.y = 1250;
+        p5.id = 5;
 
 
 

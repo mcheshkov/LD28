@@ -58,7 +58,7 @@ class AICharacter extends Character
         }
     }
 
-    public static var VIEWFIELD:Float = 200;
+    public static var VIEWFIELD:Float = 300;
 
     public function getTargetRadius(distToBullet:Float):Float{
         if (distToBullet < VIEWFIELD) return 0;
@@ -82,20 +82,40 @@ class AICharacter extends Character
 
     public function followPath(){
 
-        var p:FlxPoint = path[pathIdx];
 //            FlxG.log.notice("GOTO",p);
 //            FlxG.log.notice("POS",myp);
 //            FlxG.log.notice("DIST",FlxMath.getDistance(myp,p));
         if (pathIdx >= path.length){
+            FlxG.log.add("Path End");
             path = null;
             pathIdx = 0;
             return;
         }
-        if (FlxMath.getDistance(myp,p) < 2){
+
+        var p:FlxPoint = path[pathIdx];
+
+//        FlxG.log.add("MID",getMidpoint());
+        var mm:FlxPoint = new FlxPoint();
+        mm.x = x + origin.x;
+        mm.y = y + origin.y;
+//        FlxG.log.add("ORIG",mm);
+//        FlxG.log.add("DIST",FlxMath.getDistance(mm,p),Character.SPEED / FlxG.framerate);
+
+        if (FlxMath.getDistance(mm,p) < Character.SPEED / FlxG.framerate){
+            x = p.x - origin.x;
+            y = p.y - origin.y;
             pathIdx++;
             return;
         }
+
+//        var dx:Float = (p.x) - (this.x + this.origin.x);
+//        var dy:Float = (p.y) - (this.y + this.origin.y);
+
+//        FlxG.log.add("DX DY ",dx,dy);
+
+
         var angle = FlxAngle.angleBetweenPoint(this,p);
+//        FlxG.log.add("ANGLE",angle);
 //            FlxG.log.notice("ANGLE",angle);
         if      (angle < -PI_7_8) {goLeft();}
         else if (angle < -PI_5_8) {goUp();goLeft();}
@@ -108,15 +128,17 @@ class AICharacter extends Character
         else                      {goLeft();}
     }
 
-    public var myp(get,null):FlxPoint;
-
-    inline public function get_myp():FlxPoint{
-        return new FlxPoint(this.x + this.origin.x,this.y + this.origin.y);
+    public function findPath(p:FlxPoint):Array<FlxPoint>{
+        var arr = cast(lvl.foregroundTiles.members[0],FlxTilemap).findPath(getMidpoint(),p,false);
+        if (arr == null) FlxG.log.add("findPath NULL");
+        return arr;
     }
 
     public var folowing:Bool = false;
 
     override public function control():Void {
+//        FlxG.log.add("CONTROL",id);
+
         var found:Bool = false;
         for (p in lastPoss){
             if (p.x == x && p.y == y){
@@ -138,23 +160,23 @@ class AICharacter extends Character
         }
 
         if (consecPos == 30 || Math.random() < 0.001){
-            FlxG.log.notice("RANDOM", consecPos);
+            FlxG.log.add(id,"RANDOM", consecPos);
 
-            var ppp:FlxPoint = new FlxPoint();
-            ppp.x = myp.x + FlxRandom.intRanged(-200,200);
-            ppp.y = myp.y + FlxRandom.intRanged(-200,200);
+            var ppp:FlxPoint = getMidpoint();
+            ppp.x += FlxRandom.intRanged(-200,200);
+            ppp.y += FlxRandom.intRanged(-200,200);
 
-            setPath([ppp]);
+            setPath(findPath(ppp));
         }
 
         if(bullet.state == BulletState.Pickup){
             folowing = false;
 
             if (lastBulletState != bullet.state || path == null){
-                FlxG.log.notice("SEARCHING");
-                var pb: FlxPoint = new FlxPoint(bullet.x + bullet.origin.x, bullet.y + bullet.origin.y);
+                FlxG.log.add(this.id,"SEARCHING",bullet.state,path);
+                var pb: FlxPoint = bullet.getMidpoint();
 
-                var r = getTargetRadius(FlxMath.getDistance(myp,pb));
+                var r = getTargetRadius(FlxMath.getDistance(getMidpoint(),pb));
                 var a = FlxRandom.float() * 2 * Math.PI;
 
                 var x = r * Math.cos(a);
@@ -164,23 +186,21 @@ class AICharacter extends Character
                 target.x = x + pb.x;
                 target.y = y + pb.y;
 
-//                FlxG.log.notice("rad",r);
+                FlxG.log.add("rad",r);
 //                FlxG.log.notice("target",target);
 //                FlxG.log.notice("bullet",pb);
 
-                setPath(cast(lvl.foregroundTiles.members[0],FlxTilemap).findPath(myp,target));
+                setPath(findPath(target));
                 if (path != null) for (i in path){
-                    FlxG.log.notice("path",i);
+                    FlxG.log.add("path",i);
                 }
             }
         }
         else if (bullet.state == BulletState.Fired){
             folowing = false;
 
-            FlxG.log.notice("EVADING");
-            var ppp:FlxPoint = new FlxPoint();
-            ppp.x = myp.x;
-            ppp.y = myp.y;
+            FlxG.log.add(id,"EVADING");
+            var ppp:FlxPoint = getMidpoint();
             switch(bullet.lastDirection){
                 case Up:
                     if (bullet.y > y && bullet.overlapsAt(bullet.x,y + origin.y - bullet.origin.y,this)){
@@ -190,6 +210,7 @@ class AICharacter extends Character
                         else {
                             ppp.x += Character.size;
                         }
+//                        setPath(findPath(ppp));
                         setPath([ppp]);
                     }
                 case Down:
@@ -200,6 +221,7 @@ class AICharacter extends Character
                         else {
                             ppp.x += Character.size;
                         }
+//                        setPath(findPath(ppp));
                         setPath([ppp]);
                     }
                 case Left:
@@ -210,6 +232,7 @@ class AICharacter extends Character
                         else {
                             ppp.y -= Character.size;
                         }
+//                        setPath(findPath(ppp));
                         setPath([ppp]);
                     }
                 case Right:
@@ -220,6 +243,7 @@ class AICharacter extends Character
                         else {
                             ppp.y -= Character.size;
                         }
+//                        setPath(findPath(ppp));
                         setPath([ppp]);
                     }
             }
@@ -232,26 +256,35 @@ class AICharacter extends Character
             }
 
             if (! folowing || path == null){
-                FlxG.log.notice("FOLLOWING");
+                FlxG.log.add(id,"FOLLOWING");
                 folowing = true;
                 var p:FlxPoint = new FlxPoint();
                 p.x = cTarget.x;
                 p.y = cTarget.y;
 
-                setPath(cast(lvl.foregroundTiles.members[0],FlxTilemap).findPath(myp,p));
+                setPath(findPath(p));
             }
         }
 
         if (cTarget != null){
+            try{
+                FlxG.log.add("BOT TARGET ", cast(cTarget,Character).id);
+            }
+            catch(e:Dynamic){
+
+            }
+
             if (Math.abs(cTarget.y - y) < Character.size){
                 if (cTarget.x < x) goLeft();
                 else if (cTarget.x > x) goRight();
                 fire();
+                cTarget = null;
             }
             else if (Math.abs(cTarget.x - x)  < Character.size){
                 if (cTarget.y < y) goUp();
                 else if (cTarget.y > y) goDown();
                 fire();
+                cTarget = null;
             }
         }
 
