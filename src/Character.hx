@@ -3,7 +3,7 @@ package;
 import flixel.util.FlxPoint;
 import Bullet.BulletState;
 import Direction;
-import Bullet.BulletState;
+import Bullet.BulletType;
 import Direction;
 import Direction;
 import Direction;
@@ -122,6 +122,8 @@ class Character extends FlxSprite {
     }
 
     public function death() {
+        bullet.velocity.x = bullet.velocity.y = 0;
+        bullet.visible = false;
         isDead = true;
         animation.play("death_side");
         isDeadListen = true;
@@ -219,6 +221,11 @@ class Character extends FlxSprite {
     public function deadListenHandler(){
         isDeadListen = false;
         hurt(1);
+        bullet.switchType(BulletType.Teleport);
+        bullet.state = BulletState.NotSpawn;
+        bullet.visible = true;
+        bullet.animation.play("teleportOut");
+        bullet.isTeleportOutListen = true;
     }
 
     public function pickUpBullet() {

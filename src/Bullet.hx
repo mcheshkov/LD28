@@ -45,7 +45,6 @@ class Bullet extends FlxSprite {
     public var firedBy:Character;
     public var lastDirection:Direction;
     public var i1:BitmapData;
-    public var i0:BitmapData;
     public var assestLoaded:Bool = false;
     public var lvl:TiledLevel;
 
@@ -57,68 +56,60 @@ class Bullet extends FlxSprite {
         this.lvl = lvl;
         loadAssets();
 
-        switchType(BulletType.Teleport);
-        animation.play("teleportIn");
+        loadGraphic(i1, true, true, 64, 64);
+
+        loadAnimations();
+        switchType(BulletType.Fish);
+        animation.play("floor");
         isTeleportInListen = true;
         state = BulletState.NotSpawn;
         visible = true;
+
+        height = 8;
+        width = 8;
+        _offset.x = 28;
+        _offset.y = 56;
     }
 
-    public function switchType(type:BulletType){
-        switch(type){
-            case BulletType.Teleport:
-                loadGraphic(i0, true, true, 64, 64);
-            case BulletType.Cat:
-
-            case BulletType.Fish:
-                loadGraphic(i1, true, true, 15, 8);
-        }
-
-        loadAnimations(type);
+    public function switchType(type:BulletType) {
         this.type = type;
     }
 
     public function loadAssets() {
         if (assestLoaded) return;
 
-        i1 = Assets.getBitmapData("assets/images/fish.png");
-        i0 = Assets.getBitmapData("assets/images/teleport.png");
+        i1 = Assets.getBitmapData("assets/images/teleportAll.png");
     }
 
-    public function loadAnimations(type:BulletType) {
-
-        switch(type){
-            case BulletType.Teleport:
-                animation.add("teleportIn", [0,1,2,3,4,5,6,7,8,9], 18, false);
-                animation.add("teleportOut", [9,8,7,6,5,4,3,2,1,0], 12, false);
-            case BulletType.Cat:
-
-            case BulletType.Fish:
-                animation.add("fire", [1], 1, false);
-                animation.add("floor", [0, 1, 2, 1], 6);
-        }
+    public function loadAnimations() {
+        animation.add("teleportIn", [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 16, false);
+        animation.add("teleportOut", [19, 18, 17, 16, 15, 14, 13, 12, 11, 10], 16, false);
+        animation.add("fire", [48], 1, false);
+        animation.add("floor", [47, 48, 49, 48], 6);
     }
 
     override public function update():Void {
         super.update();
 
-        if(animation.finished){
-            if(isTeleportInListen){
+        if (animation.finished) {
+            if (isTeleportInListen) {
                 teleportInHandler();
-            } else if(isTeleportOutListen){
+            } else if (isTeleportOutListen) {
                 teleportOutHandler();
             }
         }
     }
 
-    public function teleportInHandler(){
+    public function teleportInHandler() {
         isTeleportInListen = false;
         switchType(BulletType.Fish);
         animation.play("floor");
         state = BulletState.Pickup;
     }
-    public function teleportOutHandler(){
+
+    public function teleportOutHandler() {
         isTeleportOutListen = false;
+        spawn();
     }
 
     public function drop(isDeath:Bool = false) {
@@ -127,7 +118,7 @@ class Bullet extends FlxSprite {
         animation.play("floor");
 
         if (isDeath) {
-            spawn();
+//spawn();
         } else {
             FlxG.sound.play("assets/sounds/punch.mp3", 1);
             var newX:Float = x;
@@ -171,17 +162,17 @@ class Bullet extends FlxSprite {
     }
 
     public function spawn() {
-        animation.play("floor");
+//animation.play("floor");
         state = BulletState.NotSpawn;
         visible = false;
-        var newX:Int = 300;
-        var newY:Int = 300;
-        var p:FlxPoint = new FlxPoint(0,0);
+        var newX:Float = 300;
+        var newY:Float = 300;
+        var p:FlxPoint = new FlxPoint(0, 0);
         var okPoint:Bool = false;
-        do{
+        do {
 //            newX = randomRange(0, lvl.width) * lvl.tileHeight;
 //            newY = randomRange(0, lvl.height) * lvl.tileHeight;
-//            p.set(newX + _halfWidth, newY + _halfHeight);
+//            p.set(newX, newY);
 //            okPoint = true;
 //            for(i in 0...lvl.foregroundTiles.members.length){
 //                if(cast(lvl.foregroundTiles.members[i], FlxObject).overlapsPoint(new FlxPoint(newX, newY))){
@@ -189,18 +180,15 @@ class Bullet extends FlxSprite {
 //                    break;
 //                }
 //            }
-        } while(okPoint);
+        } while (okPoint);
 
         p = null;
         x = newX;
         y = newY;
         visible = true;
-        animation.play("floor");
-        state = BulletState.Pickup;
-    }
-
-    public function teleportOut(){
-
+        switchType(BulletType.Teleport);
+        animation.play("teleportIn");
+        isTeleportInListen = true;
     }
 
     function randomRange(minNum:Int, maxNum:Int):Int {

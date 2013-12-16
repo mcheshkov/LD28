@@ -149,7 +149,7 @@ class PlayState extends FlxState {
                 if (p.headSpr.exists) {
                     remove(p.headSpr);
                 }
-                b.drop(true);
+                //b.drop(true);
             });
         }
 
