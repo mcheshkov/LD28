@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="tileset.png" tilewidth="32" tileheight="32">
-  <image source="../tiled/tileset.png" width="192" height="192"/>
+  <image source="../tiled/tileset.png" width="192" height="224"/>
   <terraintypes>
    <terrain name="island" tile="-1"/>
    <terrain name="lake" tile="-1"/>
@@ -25,6 +25,14 @@
   <tile id="34" terrain="0,0,,"/>
   <tile id="35" terrain="0,,,"/>
  </tileset>
+ <tileset firstgid="43" name="objects" tilewidth="16" tileheight="16">
+  <image source="../tiled/respawn.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="invisible" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="BG" width="50" height="50">
   <properties>
    <property name="nocollide" value="true"/>
@@ -42,4 +50,11 @@
    eJztmM0KxDAIhAN7LPT9H3fZQyCIGk3G/LAOeOiyHfM1JrF9SilPRkZg3KbkOEvJcZZWc3yM4dUqDml8vd+tfLvryvrse//byTFaQ5xGOFB1jWL4aWY+kOOYVXJg63tWs+ucY3kxQ3MpYr/6Vw5Ezp0cyJy3cPQ8Rzm0fSo5ZL8aVi9PX0J92rxW7eDQ+ih6D3LvjeDQfGhulKLqSvOJ0EqO1gut1RytJ0pv2cuBYuE4OJ4IjuqLEDcXyeEXeo1o1zXfqRzSukZxWN5lURzcmG/ikPZaiW2mT+x9uxpl0c4LqdZQ88HxjHD0zr1oDsnbI3rWWWuq5kK8f0jemuiz750REX0JrSPk+pAU2V9J6zyyj+d08jnozZccuu9KJYfPN1oSR0YGKr6BQh/B
   </data>
  </layer>
+ <objectgroup name="SPAWN_POINTS" width="50" height="50">
+  <object gid="43" x="221" y="216"/>
+  <object gid="43" x="422" y="1247"/>
+  <object gid="43" x="1344" y="1344"/>
+  <object gid="43" x="1344" y="256"/>
+  <object gid="43" x="1088" y="672"/>
+ </objectgroup>
 </map>
