@@ -82,8 +82,8 @@ class Bullet extends FlxSprite {
     }
 
     public function loadAnimations() {
-        animation.add("teleportIn", [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 18, false);
-        animation.add("teleportOut", [19, 18, 17, 16, 15, 14, 13, 12, 11, 10], 18, false);
+        animation.add("teleportIn", [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 16, false);
+        animation.add("teleportOut", [19, 18, 17, 16, 15, 14, 13, 12, 11, 10], 16, false);
         animation.add("fire", [48], 1, false);
         animation.add("floor", [47, 48, 49, 48], 6);
     }
