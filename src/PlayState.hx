@@ -1,5 +1,10 @@
 package;
 
+import flixel.util.FlxArrayUtil;
+import haxe.macro.ExprTools.ExprArrayTools;
+import flixel.addons.editors.tiled.TiledObject;
+import flash.geom.Point;
+import flixel.util.FlxPoint;
 import flixel.group.FlxGroup;
 import Bullet.BulletState;
 import Bullet.BulletState;
@@ -20,7 +25,7 @@ class PlayState extends FlxState {
     public var b:Bullet;
     public var lvl:TiledLevel;
     public var heads:FlxGroup;
-
+    public var spawnPoints:Array<TiledObject>;
 /**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -40,37 +45,37 @@ class PlayState extends FlxState {
         add(lvl.backgroundTiles);
         add(lvl.foregroundTiles);
 
+        spawnPoints = lvl.getObjectGroup("SPAWN_POINTS").objects;
+        FlxArrayUtil.shuffle(spawnPoints, spawnPoints.length * 4);
         heads = new FlxGroup();
 
-        b = new Bullet();
-        b.x = 300;
-        b.y = 300;
+        b = new Bullet(lvl);
+        b.spawn();
 
         p = new KeyboardCharacter(1, b);
-        p.x = 500;
-        p.y = 500;
+        p.x = spawnPoints[0].x;
+        p.y = spawnPoints[0].y;
         p.id = 1;
 
         var p2 = new AICharacter(2, b, lvl);
-        p2.x = 300;
-        p2.y = 800;
+        p2.x = spawnPoints[1].x;
+        p2.y = spawnPoints[1].y;
         p2.id = 2;
 
         var p3 = new AICharacter(3, b, lvl);
-        p3.x = 400;
-        p3.y = 1000;
+        p3.x = spawnPoints[2].x;
+        p3.y = spawnPoints[2].y;
         p3.id = 3;
 
         var p4 = new AICharacter(4, b, lvl);
-        p4.x = 1000;
-        p4.y = 200;
+        p4.x = spawnPoints[3].x;
+        p4.y = spawnPoints[3].y;
         p4.id = 4;
 
         var p5 = new AICharacter(5, b, lvl);
-        p5.x = 500;
-        p5.y = 1250;
+        p5.x = spawnPoints[4].x;
+        p5.y = spawnPoints[4].y;
         p5.id = 5;
-
 
 
         chars = new FlxGroup();
@@ -110,17 +115,19 @@ class PlayState extends FlxState {
         FlxG.camera.setBounds(32, 32, 49 * 32, 49 * 32);
     }
 
-    /**
+/**
 	 * Function that is called when this state is destroyed - you might want to 
 	 * consider setting all objects this state uses to null to help garbage collection.
 	 */
+
     override public function destroy():Void {
         super.destroy();
     }
 
-    /**
+/**
 	 * Function that is called once every frame.
 	 */
+
     override public function update():Void {
         super.update();
 
@@ -136,17 +143,20 @@ class PlayState extends FlxState {
         if (b.state == BulletState.Fired) {
             FlxG.overlap(chars, b, function(p:Character, b:Bullet) {
                 if (p == b.firedBy) return;
-                p.death();
-                if(p.headSpr.exists){
+                if(!p.isDead){
+                    p.death();
+                }
+                if (p.headSpr.exists) {
                     remove(p.headSpr);
                 }
                 b.drop(true);
             });
         }
 
-
         lvl.collideWithLevel(b, function(tile, bullet:Bullet) {
-            bullet.drop();
+            if (bullet.state != BulletState.NotSpawn) {
+                bullet.drop();
+           }
         });
 
         lvl.collideWithLevel(chars);

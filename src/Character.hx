@@ -225,8 +225,8 @@ class Character extends FlxSprite {
         FlxG.sound.play("assets/sounds/sound_1.mp3", 1);
         FlxG.camera.shake(0.005, 0.1);
 
-        bullet.x = x + _halfWidth - bullet.width * .5;
-        bullet.y = y + _halfHeight - bullet.height * .5;
+        bullet.x = x - offset.x + _halfWidth - bullet.width * .5;
+        bullet.y = y - offset.y + _halfHeight - bullet.height * .5;
 
 //        switch(d){
 //            case Direction.Up:

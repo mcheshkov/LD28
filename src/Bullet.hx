@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxMisc;
 import flixel.util.FlxRandom;
 import flixel.system.debug.FlxDebugger;
 import Direction;
@@ -17,6 +18,7 @@ import flixel.util.FlxMath;
 import openfl.Assets;
 
 enum BulletState {
+    NotSpawn;
     Pickup;
     Equip;
     Fired;
@@ -34,17 +36,19 @@ class Bullet extends FlxSprite {
     public var lastDirection:Direction;
     public var i1:BitmapData;
     public var assestLoaded:Bool = false;
+    public var lvl:TiledLevel;
 
-    public function new() {
+    public function new(lvl:TiledLevel) {
         super();
-
+        this.lvl = lvl;
         loadAssets();
         loadGraphic(i1, true, true, 15, 8);
 
         loadAnimations();
 
         animation.play("floor");
-        state = BulletState.Pickup;
+        state = BulletState.NotSpawn;
+        visible = false;
     }
 
 
@@ -69,7 +73,7 @@ class Bullet extends FlxSprite {
         animation.play("floor");
 
         if (isDeath) {
-            // TODO: spawn bullet
+            spawn();
         } else {
             FlxG.sound.play("assets/sounds/punch.mp3", 1);
             var newX:Float = x;
@@ -110,5 +114,25 @@ class Bullet extends FlxSprite {
 
 
         state = BulletState.Fired;
+    }
+
+    public function spawn() {
+        animation.play("floor");
+        state = BulletState.NotSpawn;
+        visible = false;
+        var newX:Int = randomRange(0, lvl.width);
+        var newY:Int = randomRange(0, lvl.height);
+
+        //if(lvl.foregroundTiles)
+
+        x = 300;
+        y = 300;
+        visible = true;
+        animation.play("floor");
+        state = BulletState.Pickup;
+    }
+
+    function randomRange(minNum:Int, maxNum:Int):Int {
+        return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
     }
 }
