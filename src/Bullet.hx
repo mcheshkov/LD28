@@ -119,6 +119,7 @@ class Bullet extends FlxSprite {
     }
     public function teleportOutHandler(){
         isTeleportOutListen = false;
+        spawn();
     }
 
     public function drop(isDeath:Bool = false) {
@@ -127,7 +128,7 @@ class Bullet extends FlxSprite {
         animation.play("floor");
 
         if (isDeath) {
-            spawn();
+            //spawn();
         } else {
             FlxG.sound.play("assets/sounds/punch.mp3", 1);
             var newX:Float = x;
@@ -171,7 +172,7 @@ class Bullet extends FlxSprite {
     }
 
     public function spawn() {
-        animation.play("floor");
+        //animation.play("floor");
         state = BulletState.NotSpawn;
         visible = false;
         var newX:Float = 300;
