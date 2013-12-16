@@ -79,7 +79,9 @@ class PlayState extends FlxState {
         add(b);
 
         FlxG.worldBounds.set(-100, -100, 150000, 150000);
+
         FlxG.camera.follow(p);
+        FlxG.camera.setBounds(32,32,49 * 32 ,49 * 32);
     }
 
 /**
