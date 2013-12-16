@@ -1,5 +1,7 @@
 package;
 
+import flixel.util.FlxArrayUtil;
+import haxe.macro.ExprTools.ExprArrayTools;
 import flixel.addons.editors.tiled.TiledObject;
 import flash.geom.Point;
 import flixel.util.FlxPoint;
@@ -44,6 +46,7 @@ class PlayState extends FlxState {
         add(lvl.foregroundTiles);
 
         spawnPoints = lvl.getObjectGroup("SPAWN_POINTS").objects;
+        FlxArrayUtil.shuffle(spawnPoints, spawnPoints.length * 4);
         heads = new FlxGroup();
 
         b = new Bullet();
@@ -152,4 +155,6 @@ class PlayState extends FlxState {
 
         if (FlxG.keyboard.pressed("R")) FlxG.switchState(new MenuState());
     }
+
+
 }
