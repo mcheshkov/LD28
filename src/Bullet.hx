@@ -65,7 +65,10 @@ class Bullet extends FlxSprite {
         state = BulletState.NotSpawn;
         visible = true;
 
-        //TODO:offset + w + h
+        height = 8;
+        width = 8;
+        _offset.x = 28;
+        _offset.y = 56;
     }
 
     public function switchType(type:BulletType) {
