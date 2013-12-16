@@ -49,9 +49,8 @@ class PlayState extends FlxState {
         FlxArrayUtil.shuffle(spawnPoints, spawnPoints.length * 4);
         heads = new FlxGroup();
 
-        b = new Bullet();
-        b.x = 300;
-        b.y = 300;
+        b = new Bullet(lvl);
+        b.spawn();
 
         p = new KeyboardCharacter(1, b);
         p.x = spawnPoints[0].x;
@@ -72,7 +71,6 @@ class PlayState extends FlxState {
         var p5 = new AICharacter(5, b, lvl);
         p5.x = spawnPoints[4].x;
         p5.y = spawnPoints[4].y;
-
 
 
         chars = new FlxGroup();
@@ -112,17 +110,19 @@ class PlayState extends FlxState {
         FlxG.camera.setBounds(32, 32, 49 * 32, 49 * 32);
     }
 
-    /**
+/**
 	 * Function that is called when this state is destroyed - you might want to 
 	 * consider setting all objects this state uses to null to help garbage collection.
 	 */
+
     override public function destroy():Void {
         super.destroy();
     }
 
-    /**
+/**
 	 * Function that is called once every frame.
 	 */
+
     override public function update():Void {
         super.update();
 
@@ -138,23 +138,24 @@ class PlayState extends FlxState {
         if (b.state == BulletState.Fired) {
             FlxG.overlap(chars, b, function(p:Character, b:Bullet) {
                 if (p == b.firedBy) return;
-                p.death();
-                if(p.headSpr.exists){
+                if(!p.isDead){
+                    p.death();
+                }
+                if (p.headSpr.exists) {
                     remove(p.headSpr);
                 }
                 b.drop(true);
             });
         }
 
-
         lvl.collideWithLevel(b, function(tile, bullet:Bullet) {
-            bullet.drop();
+            if (bullet.state != BulletState.NotSpawn) {
+                bullet.drop();
+           }
         });
 
         lvl.collideWithLevel(chars);
 
         if (FlxG.keyboard.pressed("R")) FlxG.switchState(new MenuState());
     }
-
-
 }
