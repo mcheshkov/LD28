@@ -54,39 +54,44 @@ class Bullet extends FlxSprite {
         i1 = Assets.getBitmapData("assets/images/fish.png");
     }
 
-    public function loadAnimations(){
-        animation.add("fire",[1], 1, false);
-        animation.add("floor",[0,1,2,1],6);
+    public function loadAnimations() {
+        animation.add("fire", [1], 1, false);
+        animation.add("floor", [0, 1, 2, 1], 6);
     }
 
-        override public function update():Void {
+    override public function update():Void {
         super.update();
     }
 
-    public function drop() {
+    public function drop(isDeath:Bool = false) {
         velocity.x = velocity.y = 0;
         state = BulletState.Pickup;
         animation.play("floor");
-        var newX:Float = x;
-        var newY:Float = y;
 
-        var dropBy:Int = FlxRandom.intRanged(size,size*3);
+        if (isDeath) {
+            // TODO: spawn bullet
+        } else {
+            FlxG.sound.play("assets/sounds/punch.mp3", 1);
+            var newX:Float = x;
+            var newY:Float = y;
 
-        switch(lastDirection){
-            case Direction.Up:
-                newY += dropBy;
-            case Direction.Down:
-                newY -= dropBy;
-            case Direction.Left:
-                newX += dropBy;
-            case Direction.Right:
-                newX -= dropBy;
+            var dropBy:Int = FlxRandom.intRanged(size, size * 3);
+
+            switch(lastDirection){
+                case Direction.Up:
+                    newY += dropBy;
+                case Direction.Down:
+                    newY -= dropBy;
+                case Direction.Left:
+                    newX += dropBy;
+                case Direction.Right:
+                    newX -= dropBy;
+            }
+
+            FlxTween.linearMotion(this, x, y, newX, newY, .3, true, {ease:FlxEase.quintOut, type:FlxTween.ONESHOT, complete: function(a:FlxTween) {
+                immovable = false;
+            }});
         }
-
-        FlxTween.linearMotion(this, x, y, newX, newY, .3, true, {ease:FlxEase.quintOut, type:FlxTween.ONESHOT, complete: function(a:FlxTween) {
-            immovable = false;
-        }});
-
     }
 
     public function fire(d:Direction) {

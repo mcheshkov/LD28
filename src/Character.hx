@@ -21,8 +21,7 @@ import flixel.util.FlxMath;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
-class Character extends FlxSprite
-{
+class Character extends FlxSprite {
     public static var SPEED:Int = 300;
     public static var size:Int = 32;
 
@@ -38,7 +37,7 @@ class Character extends FlxSprite
     public var bullet:Bullet;
     public var lastDirection:Direction;
 
-    public function new(skin:Int,bullet:Bullet) {
+    public function new(skin:Int, bullet:Bullet) {
         super();
 
         loadAssets();
@@ -112,10 +111,10 @@ class Character extends FlxSprite
         loadAnimations();
     }
 
-    public function death(){
-           isDead = true;
-           animation.play("death_side");
-
+    public function death() {
+        isDead = true;
+        animation.play("death_side");
+        FlxG.sound.play("assets/sounds/scream_long.mp3", 1);
     }
 
 
@@ -137,7 +136,7 @@ class Character extends FlxSprite
         animation.add("side_walk_load", [20, 21, 22, 23, 24, 25, 26], 10);
     }
 
-    public function goLeft(){
+    public function goLeft() {
         velocity.x = -SPEED;
         lastDirection = Direction.Left;
         charged ? animation.play("side_walk") : animation.play("side_walk_load");
@@ -145,7 +144,7 @@ class Character extends FlxSprite
         walking = true;
     }
 
-    public function goRight(){
+    public function goRight() {
         velocity.x = SPEED;
         lastDirection = Direction.Right;
         charged ? animation.play("side_walk") : animation.play("side_walk_load");
@@ -153,7 +152,7 @@ class Character extends FlxSprite
         walking = true;
     }
 
-    public function goUp(){
+    public function goUp() {
         velocity.y = -SPEED;
         lastDirection = Direction.Up;
         animation.play("up_walk");
@@ -161,7 +160,7 @@ class Character extends FlxSprite
         walking = true;
     }
 
-    public function goDown(){
+    public function goDown() {
         velocity.y = SPEED;
         lastDirection = Direction.Down;
         charged ? animation.play("down_walk") : animation.play("down_walk_load");
@@ -197,8 +196,8 @@ class Character extends FlxSprite
                         charged ? animation.play("side_stand") : animation.play("side_stand_load");
                 }
             }
-        }else{
-            if(animation.finished){hurt(1);}
+        } else {
+            if (animation.finished) {hurt(1);}
 
         }
 
@@ -208,14 +207,14 @@ class Character extends FlxSprite
     public function pickUpBullet() {
         FlxG.log.warn("pick up");
         charged = true;
-
+        FlxG.sound.play("assets/sounds/load.mp3", 1);
         bullet.state = BulletState.Equip;
         bullet.ownedBy = this;
     }
 
     public function fireBullet(d:Direction) {
         if (!charged) return;
-
+        FlxG.sound.play("assets/sounds/sound_1.mp3", 1);
         FlxG.camera.shake(0.005, 0.1);
 
         bullet.x = x + _halfWidth - bullet.width * .5;

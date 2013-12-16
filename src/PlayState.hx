@@ -33,7 +33,7 @@ class PlayState extends FlxState {
 #end
 
         super.create();
-        FlxG.sound.play("assets/music/LD_3.mp3", 1, true);
+        FlxG.sound.playMusic("assets/music/LD_3.mp3", 1);
         lvl = new TiledLevel("assets/data/map.tmx");
         add(lvl.backgroundTiles);
         add(lvl.foregroundTiles);
@@ -111,7 +111,7 @@ class PlayState extends FlxState {
             FlxG.overlap(chars, b, function(p:Character, b:Bullet) {
                 if (p == b.firedBy) return;
                 p.death();
-                b.drop();
+                b.drop(true);
             });
         }
 
