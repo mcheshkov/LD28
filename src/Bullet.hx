@@ -57,8 +57,8 @@ class Bullet extends FlxSprite {
         this.lvl = lvl;
         loadAssets();
 
-        switchType(BulletType.Teleport);
-        animation.play("teleportIn");
+        switchType(BulletType.Fish);
+        animation.play("floor");
         isTeleportInListen = true;
         state = BulletState.NotSpawn;
         visible = true;
@@ -174,14 +174,14 @@ class Bullet extends FlxSprite {
         animation.play("floor");
         state = BulletState.NotSpawn;
         visible = false;
-        var newX:Int = 300;
-        var newY:Int = 300;
+        var newX:Float = 300;
+        var newY:Float = 300;
         var p:FlxPoint = new FlxPoint(0,0);
         var okPoint:Bool = false;
         do{
 //            newX = randomRange(0, lvl.width) * lvl.tileHeight;
 //            newY = randomRange(0, lvl.height) * lvl.tileHeight;
-//            p.set(newX + _halfWidth, newY + _halfHeight);
+//            p.set(newX, newY);
 //            okPoint = true;
 //            for(i in 0...lvl.foregroundTiles.members.length){
 //                if(cast(lvl.foregroundTiles.members[i], FlxObject).overlapsPoint(new FlxPoint(newX, newY))){
@@ -195,12 +195,9 @@ class Bullet extends FlxSprite {
         x = newX;
         y = newY;
         visible = true;
-        animation.play("floor");
-        state = BulletState.Pickup;
-    }
-
-    public function teleportOut(){
-
+        switchType(BulletType.Teleport);
+        animation.play("teleportIn");
+        isTeleportInListen = true;
     }
 
     function randomRange(minNum:Int, maxNum:Int):Int {
