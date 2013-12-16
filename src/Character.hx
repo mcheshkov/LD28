@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxPoint;
 import Bullet.BulletState;
 import Direction;
 import Bullet.BulletState;
@@ -37,10 +38,15 @@ class Character extends FlxSprite {
     public var bullet:Bullet;
     public var lastDirection:Direction;
 
+    public var headSpr:FlxSprite;
+
     public function new(skin:Int, bullet:Bullet) {
         super();
 
         loadAssets();
+
+        headSpr = new FlxSprite();
+        headSpr.scrollFactor = new FlxPoint(0,0);
 
         switch(skin){
             case 1:
@@ -83,31 +89,31 @@ class Character extends FlxSprite {
 
     public function loadChar1() {
         loadGraphic(i1, true, true, 65, 33);
-
+        headSpr.loadGraphic(Assets.getBitmapData("assets/images/head1.png"));
         loadAnimations();
     }
 
     public function loadChar2() {
         loadGraphic(i2, true, true, 65, 33);
-
+        headSpr.loadGraphic(Assets.getBitmapData("assets/images/head2.png"));
         loadAnimations();
     }
 
     public function loadChar3() {
         loadGraphic(i3, true, true, 65, 33);
-
+        headSpr.loadGraphic(Assets.getBitmapData("assets/images/head3.png"));
         loadAnimations();
     }
 
     public function loadChar4() {
         loadGraphic(i4, true, true, 65, 33);
-
+        headSpr.loadGraphic(Assets.getBitmapData("assets/images/head4.png"));
         loadAnimations();
     }
 
     public function loadChar5() {
         loadGraphic(i5, true, true, 65, 33);
-
+        headSpr.loadGraphic(Assets.getBitmapData("assets/images/head5.png"));
         loadAnimations();
     }
 
@@ -220,16 +226,16 @@ class Character extends FlxSprite {
         bullet.x = x + _halfWidth - bullet.width * .5;
         bullet.y = y + _halfHeight - bullet.height * .5;
 
-        switch(d){
-            case Direction.Up:
-                bullet.y -= _halfHeight + bullet.height * .5;
-            case Direction.Down:
-                bullet.y += _halfHeight + bullet.height * .5;
-            case Direction.Left:
-                bullet.x -= _halfWidth + bullet.width * .5;
-            case Direction.Right:
-                bullet.x += _halfWidth + bullet.width * .5;
-        }
+//        switch(d){
+//            case Direction.Up:
+//                bullet.y -= _halfHeight + bullet.height * .5;
+//            case Direction.Down:
+//                bullet.y += _halfHeight + bullet.height * .5;
+//            case Direction.Left:
+//                bullet.x -= _halfWidth + bullet.width * .5;
+//            case Direction.Right:
+//                bullet.x += _halfWidth + bullet.width * .5;
+//        }
 
         charged = false;
 
