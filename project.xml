@@ -57,4 +57,9 @@
 	
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+
+
+
+
+    <assets path="lib/web" include="*" type="template" rename=""/>
 </project>

@@ -115,6 +115,7 @@ class AICharacter extends Character
 
 
         var angle = FlxAngle.angleBetweenPoint(this,p);
+        angle += FlxRandom.floatRanged(-PI_1_8,PI_1_8);
 //        FlxG.log.add("ANGLE",angle);
 //            FlxG.log.notice("ANGLE",angle);
         if      (angle < -PI_7_8) {goLeft();}
@@ -141,7 +142,7 @@ class AICharacter extends Character
 
         var found:Bool = false;
         for (p in lastPoss){
-            if (p.x == x && p.y == y){
+            if (Math.round(p.x) == Math.round(x) && Math.round(p.y) == Math.round(y)){
                 consecPos++;
                 found = true;
                 break;
@@ -154,26 +155,28 @@ class AICharacter extends Character
             pp.x = x;
             pp.y = y;
             lastPoss.push(pp);
-            if (lastPoss.length > 2) {
+            if (lastPoss.length > 4) {
                 lastPoss.shift();
             }
         }
 
         if (consecPos == 30 || Math.random() < 0.001){
-            FlxG.log.add(id,"RANDOM", consecPos);
+//            FlxG.log.add(id,"RANDOM", consecPos);
 
             var ppp:FlxPoint = getMidpoint();
             ppp.x += FlxRandom.intRanged(-200,200);
             ppp.y += FlxRandom.intRanged(-200,200);
 
             setPath(findPath(ppp));
+
+            cTarget = null;
         }
 
         if(bullet.state == BulletState.Pickup){
             folowing = false;
 
             if (lastBulletState != bullet.state || path == null){
-                FlxG.log.add(this.id,"SEARCHING",bullet.state,path);
+//                FlxG.log.add(this.id,"SEARCHING",bullet.state,path);
                 var pb: FlxPoint = bullet.getMidpoint();
 
                 var r = getTargetRadius(FlxMath.getDistance(getMidpoint(),pb));
@@ -186,7 +189,7 @@ class AICharacter extends Character
                 target.x = x + pb.x;
                 target.y = y + pb.y;
 
-                FlxG.log.add("rad",r);
+//                FlxG.log.add("rad",r);
 //                FlxG.log.notice("target",target);
 //                FlxG.log.notice("bullet",pb);
 
@@ -199,7 +202,7 @@ class AICharacter extends Character
         else if (bullet.state == BulletState.Fired){
             folowing = false;
 
-            FlxG.log.add(id,"EVADING");
+//            FlxG.log.add(id,"EVADING");
             var ppp:FlxPoint = getMidpoint();
             switch(bullet.lastDirection){
                 case Up:
@@ -256,7 +259,7 @@ class AICharacter extends Character
             }
 
             if (! folowing || path == null){
-                FlxG.log.add(id,"FOLLOWING");
+//                FlxG.log.add(id,"FOLLOWING");
                 folowing = true;
                 var p:FlxPoint = new FlxPoint();
                 p.x = cTarget.x;

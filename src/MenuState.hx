@@ -176,6 +176,9 @@ class MenuState extends FlxState
         add(ss3);
     }
 
+    public var a:FlxSprite;
+    public var b:FlxSprite;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -188,9 +191,14 @@ class MenuState extends FlxState
 		FlxG.mouse.hide();
 		#end
         FlxG.sound.playMusic("assets/music/LD.mp3", 1);
-        var a:FlxSprite = new FlxSprite();
+
+        a = new FlxSprite();
         a.loadGraphic(Assets.getBitmapData("assets/images/menu.png"));
         add(a);
+
+        b = new FlxSprite();
+        b.loadGraphic(Assets.getBitmapData("assets/images/bulletdare.png"));
+        add(b);
 
 
 //        mixing();
@@ -213,6 +221,10 @@ class MenuState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+
+        if(FlxG.keyboard.pressed("ENTER")){
+            b.visible = false;
+        }
 
         if(FlxG.keyboard.pressed("SHIFT")){
             FlxG.switchState(new PlayState());

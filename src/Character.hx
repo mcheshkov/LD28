@@ -221,10 +221,10 @@ class Character extends FlxSprite {
     public function deadListenHandler(){
         isDeadListen = false;
         hurt(1);
-        bullet.switchType(BulletType.Teleport);
         bullet.state = BulletState.NotSpawn;
         bullet.visible = true;
-        bullet.animation.play("teleportOut");
+        bullet.play_teleportOut();
+        bullet.switchType(BulletType.Teleport);
         bullet.isTeleportOutListen = true;
     }
 

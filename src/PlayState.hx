@@ -22,6 +22,10 @@ import flixel.util.FlxMath;
 class PlayState extends FlxState {
     public var chars:FlxGroup;
     public var p:Character;
+    public var p2:AICharacter;
+    public var p3:AICharacter;
+    public var p4:AICharacter;
+    public var p5:AICharacter;
     public var b:Bullet;
     public var lvl:TiledLevel;
     public var heads:FlxGroup;
@@ -57,22 +61,22 @@ class PlayState extends FlxState {
         p.y = spawnPoints[0].y;
         p.id = 1;
 
-        var p2 = new AICharacter(2, b, lvl);
+        p2 = new AICharacter(2, b, lvl);
         p2.x = spawnPoints[1].x;
         p2.y = spawnPoints[1].y;
         p2.id = 2;
 
-        var p3 = new AICharacter(3, b, lvl);
+        p3 = new AICharacter(3, b, lvl);
         p3.x = spawnPoints[2].x;
         p3.y = spawnPoints[2].y;
         p3.id = 3;
 
-        var p4 = new AICharacter(4, b, lvl);
+        p4 = new AICharacter(4, b, lvl);
         p4.x = spawnPoints[3].x;
         p4.y = spawnPoints[3].y;
         p4.id = 4;
 
-        var p5 = new AICharacter(5, b, lvl);
+        p5 = new AICharacter(5, b, lvl);
         p5.x = spawnPoints[4].x;
         p5.y = spawnPoints[4].y;
         p5.id = 5;
@@ -162,5 +166,8 @@ class PlayState extends FlxState {
         lvl.collideWithLevel(chars);
 
         if (FlxG.keyboard.pressed("R")) FlxG.switchState(new MenuState());
+
+        if (! p.alive) FlxG.switchState(new LoseState());
+        if (! p2.alive && ! p3.alive && !p4.alive && !p5.alive) FlxG.switchState(new WinState());
     }
 }

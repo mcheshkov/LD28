@@ -1,5 +1,6 @@
 package;
 
+import Bullet.BulletType;
 import flash.geom.Point;
 import flixel.util.FlxPoint;
 import flixel.util.FlxMisc;
@@ -31,6 +32,7 @@ enum BulletType {
     Teleport;
     Fish;
     Cat;
+    Mole;
 }
 
 /**
@@ -59,8 +61,8 @@ class Bullet extends FlxSprite {
         loadGraphic(i1, true, true, 64, 64);
 
         loadAnimations();
-        switchType(BulletType.Fish);
-        animation.play("floor");
+        switchType(BulletType.Cat);
+        play_floor();
         isTeleportInListen = true;
         state = BulletState.NotSpawn;
         visible = true;
@@ -82,10 +84,26 @@ class Bullet extends FlxSprite {
     }
 
     public function loadAnimations() {
-        animation.add("teleportIn", [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 16, false);
-        animation.add("teleportOut", [19, 18, 17, 16, 15, 14, 13, 12, 11, 10], 16, false);
-        animation.add("fire", [48], 1, false);
-        animation.add("floor", [47, 48, 49, 48], 6);
+        animation.add("fish_teleportIn",  [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], 16, false);
+        animation.add("fish_teleportOut", [19, 18, 17, 16, 15, 14, 13, 12, 11, 10], 16, false);
+        animation.add("fish_fire", [48], 1, false);
+        animation.add("fish_fire_up", [48], 1, false);
+        animation.add("fish_fire_down", [48], 1, false);
+        animation.add("fish_floor", [47, 48, 49, 48], 6);
+
+        animation.add("cat_teleportIn",  [0,1,2,3,4,5,6,7,8,9], 16, false);
+        animation.add("cat_teleportOut", [9,8,7,6,5,4,3,2,1,0], 16, false);
+        animation.add("cat_fire", [35], 1, false);
+        animation.add("cat_fire_up", [44], 1, false);
+        animation.add("cat_fire_down", [39], 1, false);
+        animation.add("cat_floor", [37,38,39,40], 6);
+
+        animation.add("mole_teleportIn", [20,21,22,23,24,25,26,27,28,29], 16, false);
+        animation.add("mole_teleportOut", [29,28,27,26,25,24,23,22,21,20], 16, false);
+        animation.add("mole_fire", [58], 1, false);
+        animation.add("mole_fire_up", [60], 1, false);
+        animation.add("mole_fire_down", [59], 1, false);
+        animation.add("mole_floor", [50,51,52,53,54,53,52,51,50], 6);
     }
 
     override public function update():Void {
@@ -100,10 +118,64 @@ class Bullet extends FlxSprite {
         }
     }
 
+    public function play_floor(){
+        switch (type){
+            case BulletType.Cat: animation.play("cat_floor");
+            case BulletType.Fish: animation.play("fish_floor");
+            case BulletType.Mole: animation.play("mole_floor");
+            case BulletType.Teleport:
+        }
+    }
+
+    public function play_fire(){
+        switch (type){
+            case BulletType.Cat: animation.play("cat_fire");
+            case BulletType.Fish: animation.play("fish_fire");
+            case BulletType.Mole: animation.play("mole_fire");
+            case BulletType.Teleport:
+        }
+    }
+
+    public function play_fire_up(){
+        switch (type){
+            case BulletType.Cat: animation.play("cat_fire_up");
+            case BulletType.Fish: animation.play("fish_fire_up");
+            case BulletType.Mole: animation.play("mole_fire_up");
+            case BulletType.Teleport:
+        }
+    }
+
+    public function play_fire_down(){
+        switch (type){
+            case BulletType.Cat: animation.play("cat_fire_down");
+            case BulletType.Fish: animation.play("fish_fire_down");
+            case BulletType.Mole: animation.play("mole_fire_down");
+            case BulletType.Teleport:
+        }
+    }
+
+    public function play_teleportIn(){
+        switch (type){
+            case BulletType.Cat: animation.play("cat_teleportIn");
+            case BulletType.Fish: animation.play("fish_teleportIn");
+            case BulletType.Mole: animation.play("mole_teleportIn");
+            case BulletType.Teleport:
+        }
+    }
+
+    public function play_teleportOut(){
+        switch (type){
+            case BulletType.Cat: animation.play("cat_teleportOut");
+            case BulletType.Fish: animation.play("fish_teleportOut");
+            case BulletType.Mole: animation.play("mole_teleportOut");
+            case BulletType.Teleport:
+        }
+    }
+
     public function teleportInHandler() {
         isTeleportInListen = false;
-        switchType(BulletType.Fish);
-        animation.play("floor");
+//        switchType(BulletType.Fish);
+        play_floor();
         state = BulletState.Pickup;
     }
 
@@ -115,7 +187,7 @@ class Bullet extends FlxSprite {
     public function drop(isDeath:Bool = false) {
         velocity.x = velocity.y = 0;
         state = BulletState.Pickup;
-        animation.play("floor");
+        play_floor();
 
         if (isDeath) {
 //spawn();
@@ -144,17 +216,24 @@ class Bullet extends FlxSprite {
     }
 
     public function fire(d:Direction) {
-        animation.play("fire");
         lastDirection = d;
         switch(d){
             case Direction.Up:
                 velocity.y = -SPEED;
+                play_fire_up();
             case Direction.Down:
                 velocity.y = SPEED;
+                play_fire_down();
             case Direction.Left:
+                facing = FlxObject.RIGHT; //hack
+                if (type == BulletType.Fish) facing = FlxObject.LEFT;
                 velocity.x = -SPEED;
+                play_fire();
             case Direction.Right:
+                facing = FlxObject.LEFT; //hack
+                if (type == BulletType.Fish) facing = FlxObject.RIGHT;
                 velocity.x = SPEED;
+                play_fire();
         }
 
 
@@ -162,7 +241,7 @@ class Bullet extends FlxSprite {
     }
 
     public function spawn() {
-//animation.play("floor");
+//play_floor();
         state = BulletState.NotSpawn;
         visible = false;
         var newX:Float = 300;
@@ -170,24 +249,35 @@ class Bullet extends FlxSprite {
         var p:FlxPoint = new FlxPoint(0, 0);
         var okPoint:Bool = false;
         do {
-//            newX = randomRange(0, lvl.width) * lvl.tileHeight;
-//            newY = randomRange(0, lvl.height) * lvl.tileHeight;
-//            p.set(newX, newY);
-//            okPoint = true;
-//            for(i in 0...lvl.foregroundTiles.members.length){
-//                if(cast(lvl.foregroundTiles.members[i], FlxObject).overlapsPoint(new FlxPoint(newX, newY))){
-//                    okPoint = false;
-//                    break;
-//                }
-//            }
-        } while (okPoint);
+            newX = randomRange(0, lvl.width) * lvl.tileWidth + lvl.tileWidth / 2;
+            newY = randomRange(0, lvl.height) * lvl.tileHeight + lvl.tileHeight / 2 ;
+            p.set(newX, newY);
+            okPoint = true;
+            for(m in lvl.foregroundTiles.members){
+                if(overlapsAt(newX,newY,cast(m, FlxObject))){
+                    FlxG.log.add("BADSPAWN");
+                    okPoint = false;
+                    break;
+                }
+            }
+        } while (!okPoint);
+
+        FlxG.log.add("SPAWN",newX,newY);
 
         p = null;
         x = newX;
         y = newY;
         visible = true;
-        switchType(BulletType.Teleport);
-        animation.play("teleportIn");
+        var t = FlxRandom.intRanged(1,3);
+        var tt = BulletType.Fish;
+        FlxG.log.add("SPAWN TYPE",t);
+        switch(t){
+            case 1: tt = BulletType.Fish;
+            case 2: tt = BulletType.Cat;
+            case 3: tt = BulletType.Mole;
+        }
+        switchType(tt);
+        play_teleportIn();
         isTeleportInListen = true;
     }
 
